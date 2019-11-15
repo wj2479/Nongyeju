@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--底部按钮-->
+    <string-array name="tab_titles">
+        <item>主页</item>
+        <item>进度</item>
+        <item>签到</item>
+        <item>质量</item>
+        <item>我</item>
+    </string-array>
+
+    <string-array name="tab2_titles">
+        <item>主页</item>
+        <item>进度</item>
+        <item>质量</item>
+        <item>我</item>
+    </string-array>
+    <!--信息类型-->
+    <string-array name="types">
+        <item>其它信息</item>
+    </string-array>
+    <!--紧急程度-->
+    <string-array name="levels">
+        <item>一般</item>
+        <item>紧急</item>
+    </string-array>
+
+    <!--工作标签-->
+    <string-array name="report_titles">
+        <item>日  报</item>
+        <item>周  报</item>
+        <item>月  报</item>
+    </string-array>
+
+    <!--信息来源-->
+    <string-array name="froms">
+        <item>主动摸排</item>
+        <item>当事人申请</item>
+        <item>群众来访</item>
+        <item>领导批示</item>
+        <item>上级交办</item>
+        <item>其他途径</item>
+    </string-array>
+
+
+
+    <!--项目名称分类-->
+    <string-array name="project_types">
+        <item>项目A</item>
+        <item>项目B</item>
+        <item>项目C</item>
+        <item>项目D</item>
+    </string-array>
+
+    <!--上报类别-->
+    <string-array name="upload_types">
+        <item>工作日志</item>
+        <item>紧急上报</item>
+    </string-array>
+
+
+    <!--用户角色-->
+    <string-array name="roles">
+        <item>上报员</item>
+        <item>监  理</item>
+        <item>主管领导</item>
+    </string-array>
+
+    <!--村-->
+    <string-array name="villages">
+        <item>惠家庄村</item>
+        <item>沈疃一村</item>
+        <item>沈疃二村</item>
+        <item>沈疃三村</item>
+        <item>西陈疃一村</item>
+        <item>西陈疃二村</item>
+        <item>西陈疃三村</item>
+        <item>西陈疃四村</item>
+        <item>东陈疃村</item>
+        <item>北鲍疃村</item>
+
+        <item>堰东岭村</item>
+        <item>滕家庄子村</item>
+        <item>水陈坡村</item>
+        <item>东尚沟村</item>
+        <item>西尚沟村</item>
+        <item>卞家庄村</item>
+        <item>南鲍疃村</item>
+        <item>河东村</item>
+        <item>南山村</item>
+        <item>城顶前村</item>
+
+        <item>毛家庄村</item>
+        <item>姜疃村</item>
+        <item>北疃村</item>
+        <item>石灰窑村</item>
+        <item>杨家山子村</item>
+        <item>高家官庄村</item>
+        <item>李家大沟村</item>
+        <item>上蔡庄村</item>
+        <item>下蔡庄村</item>
+        <item>西石墩村</item>
+
+        <item>中石墩村</item>
+        <item>东石墩村</item>
+        <item>石旺沟村</item>
+        <item>七里沟子村</item>
+        <item>惠家官庄村</item>
+        <item>许家洼村</item>
+        <item>曹家官庄村</item>
+    </string-array>
+</resources>
