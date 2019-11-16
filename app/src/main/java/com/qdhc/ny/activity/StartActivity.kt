@@ -10,10 +10,7 @@ import cn.bmob.v3.exception.BmobException
 import cn.bmob.v3.listener.FindListener
 import cn.bmob.v3.listener.SaveListener
 import com.google.gson.Gson
-import com.qdhc.ny.LoginActivity
-import com.qdhc.ny.Main2Activity
-import com.qdhc.ny.MainActivity
-import com.qdhc.ny.R
+import com.qdhc.ny.*
 import com.qdhc.ny.base.BaseActivity
 import com.qdhc.ny.bmob.UserInfo
 import com.qdhc.ny.utils.SharedPreferencesUtils
@@ -53,12 +50,11 @@ class StartActivity : BaseActivity() {
                         Log.e("TAG", "自动登录成功:" + Gson().toJson(user))
                         SharedPreferencesUtils.saveLogin(mContext, user)
 
-                        if (user.role == 3) {
-                            startActivity(Intent(mContext, Main2Activity::class.java))
-                        } else {
-                            startActivity(Intent(mContext, MainActivity::class.java))
+                        when (user.role) {
+                            1 -> startActivity(Intent(mContext, MainActivity::class.java))
+                            2 -> startActivity(Intent(mContext, Main2Activity::class.java))
+                            3 -> startActivity(Intent(mContext, Main3Activity::class.java))
                         }
-
                     } else {
                         startActivity(Intent(mContext, LoginActivity::class.java))
                     }
@@ -91,10 +87,10 @@ class StartActivity : BaseActivity() {
         SharedPreferencesUtils.saveLogin(mContext, user)
         SharedPreferencesUtil.save(mContext, "pwd", pwd)
 
-        if (user.role == 3) {
-            startActivity(Intent(mContext, Main2Activity::class.java))
-        } else {
-            startActivity(Intent(mContext, MainActivity::class.java))
+        when (user.role) {
+            1 -> startActivity(Intent(mContext, MainActivity::class.java))
+            2 -> startActivity(Intent(mContext, Main2Activity::class.java))
+            3 -> startActivity(Intent(mContext, Main3Activity::class.java))
         }
     }
 

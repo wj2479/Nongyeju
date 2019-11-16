@@ -54,10 +54,10 @@ class DayReportFragment(type: Int) : BaseFragment() {
         expandLv.setOnChildClickListener(object : ExpandableListView.OnChildClickListener {
             override fun onChildClick(parent: ExpandableListView?, v: View?, groupPosition: Int, childPosition: Int, id: Long): Boolean {
                 var report: Report? = null;
-                var project =  reportProjects.get(groupPosition);
+                var project = reportProjects.get(groupPosition);
 
                 when (type) {
-                    Constant.REPORT_TYPE_DAY -> report =project.dayRreports.get(childPosition)
+                    Constant.REPORT_TYPE_DAY -> report = project.dayRreports.get(childPosition)
                     Constant.REPORT_TYPE_WEEK -> report = project.weekRreports.get(childPosition)
                     Constant.REPORT_TYPE_MONTH -> report = project.monthRreports.get(childPosition)
                 }
@@ -66,11 +66,11 @@ class DayReportFragment(type: Int) : BaseFragment() {
                 var intent = Intent(context, ReportDetailsActivity::class.java)
                 intent.putExtra("project", project)
                 intent.putExtra("report", report)
-                intent.putExtra("type", type)
                 startActivity(intent)
                 return true
             }
         })
+
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

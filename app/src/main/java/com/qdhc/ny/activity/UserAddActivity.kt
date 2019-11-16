@@ -16,7 +16,7 @@ class UserAddActivity : BaseActivity() {
     }
 
     override fun initView() {
-        title_tv_title.text = "添加新用户"
+        title_tv_title.text = "添加新监理"
     }
 
     override fun initClick() {
@@ -60,7 +60,8 @@ class UserAddActivity : BaseActivity() {
             user.setPassword(password)
             user.nickName = nickName
             user.mobilePhoneNumber = phone
-            user.role = roleSpinner.selectedItemPosition + 1
+            user.areaId = intent.getIntExtra("area", 0)
+            user.role = 1
             user.signUp(object : SaveListener<UserInfo>() {
                 override fun done(user: UserInfo?, e: BmobException?) {
                     if (e == null) {

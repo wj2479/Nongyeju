@@ -4,6 +4,7 @@ import android.os.Environment;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.text.SimpleDateFormat;
 
 /**
  * ================================================
@@ -15,6 +16,9 @@ import java.lang.annotation.RetentionPolicy;
  * ================================================
  */
 public class Constant {
+
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
     public static final String SYS_ROOT = "http://oa.cunlintao.com/"; //线上版本地址
 
     //微信支付appid

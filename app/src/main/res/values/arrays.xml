@@ -10,9 +10,8 @@
     </string-array>
 
     <string-array name="tab2_titles">
-        <item>主页</item>
-        <item>进度</item>
-        <item>质量</item>
+        <item>工程</item>
+        <item>人员</item>
         <item>我</item>
     </string-array>
     <!--信息类型-->
@@ -43,7 +42,6 @@
     </string-array>
 
 
-
     <!--项目名称分类-->
     <string-array name="project_types">
         <item>项目A</item>
@@ -58,10 +56,16 @@
         <item>紧急上报</item>
     </string-array>
 
+    <!--管辖区域-->
+    <string-array name="areas">
+        <item>东港区</item>
+        <item>莒  县</item>
+        <item>五  莲</item>
+    </string-array>
 
     <!--用户角色-->
     <string-array name="roles">
-        <item>上报员</item>
+        <item>监  理</item>
         <item>监  理</item>
         <item>主管领导</item>
     </string-array>

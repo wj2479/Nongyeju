@@ -86,10 +86,10 @@ class IndexFragment : BaseFragment() {
         //更多公告
         tv_notice_more.setOnClickListener { startActivity(Intent(activity, NoticeActivity::class.java)) }
         //签到记录
-        tv_sign_in.setOnClickListener { startActivity(Intent(activity, SignInListActivity::class.java)) }
+        tv_sign_in.setOnClickListener { startActivity(Intent(activity, SignInListActivity::class.java).putExtra("userInfo", userInfo)) }
         //运动轨迹
         tv_achievement.setOnClickListener {
-            startActivity(Intent(activity, TraceRecordActivity::class.java))
+            startActivity(Intent(activity, TraceRecordActivity::class.java).putExtra("userInfo", userInfo))
         }
         //我的客户
         tv_customer.setOnClickListener {

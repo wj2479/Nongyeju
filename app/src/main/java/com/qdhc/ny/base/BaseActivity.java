@@ -54,7 +54,7 @@ public abstract class BaseActivity extends FragmentActivity {
      *
      */
     @Subscribe
-    public void onEvent(String event){
+    public void onEvent(String event) {
     }
 
     /**
@@ -177,4 +177,5 @@ public abstract class BaseActivity extends FragmentActivity {
             mDialog.dismiss();
         }
     }
+
 }

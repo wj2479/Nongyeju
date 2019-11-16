@@ -1,19 +1,35 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
+    <RelativeLayout
+        android:id="@+id/titleLayout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_50"
-        android:background="@color/white"
-        android:gravity="center"
-        android:text="信息列表"
-        android:textSize="@dimen/textsize_9" />
+        android:layout_height="@dimen/dp_50">
 
-    <View style="@style/line_vertical"></View>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:gravity="center"
+            android:text="工程列表"
+            android:textSize="@dimen/textsize_9" />
 
+        <ImageView
+            android:id="@+id/addIv"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="8dp"
+            android:src="@drawable/ic_add"
+            android:padding="12dp"></ImageView>
+
+        <View
+            style="@style/line_vertical"
+            android:layout_alignParentBottom="true"></View>
+    </RelativeLayout>
 
     <com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView
         android:id="@+id/smrw"

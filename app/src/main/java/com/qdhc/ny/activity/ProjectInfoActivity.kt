@@ -78,6 +78,10 @@ class ProjectInfoActivity : BaseActivity() {
         } catch (e: Exception) {
         }
 
+        if (userInfo.role > 1) {
+            commentButLayout.visibility = View.GONE
+        }
+
     }
 
     fun getData() {

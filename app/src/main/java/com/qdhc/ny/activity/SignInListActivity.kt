@@ -13,7 +13,6 @@ import com.qdhc.ny.adapter.SignAdapter
 import com.qdhc.ny.base.BaseActivity
 import com.qdhc.ny.bmob.Sign
 import com.qdhc.ny.bmob.UserInfo
-import com.qdhc.ny.utils.SharedPreferencesUtils
 import com.yanzhenjie.recyclerview.swipe.widget.DefaultItemDecoration
 import kotlinx.android.synthetic.main.activity_sign_in_sear.*
 import kotlinx.android.synthetic.main.layout_title_theme.*
@@ -30,7 +29,6 @@ class SignInListActivity : BaseActivity() {
     }
 
     override fun initView() {
-        title_tv_title.text = "签到记录"
         initRefresh()
     }
 
@@ -39,8 +37,9 @@ class SignInListActivity : BaseActivity() {
     }
 
     override fun initData() {
-        userInfo = SharedPreferencesUtils.loadLogin(this)
-        getData()
+        userInfo = intent.getSerializableExtra("userInfo") as UserInfo
+        title_tv_title.text = userInfo.nickName + "的签到记录"
+        getData(userInfo.objectId)
     }
 
     var datas = ArrayList<Sign>()
@@ -71,9 +70,9 @@ class SignInListActivity : BaseActivity() {
         mAdapter.emptyView = emptyView
     }
 
-    fun getData() {
+    fun getData(uid: String) {
         var bmobQuery = BmobQuery<Sign>();
-        bmobQuery.addWhereEqualTo("uid", userInfo.objectId)
+        bmobQuery.addWhereEqualTo("uid", uid)
 //        bmobQuery.order("locationTime")
         bmobQuery.order("-createdAt")
 

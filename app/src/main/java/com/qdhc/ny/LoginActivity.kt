@@ -89,7 +89,7 @@ class LoginActivity : BaseActivity() {
     lateinit var alertDialog2: AlertDialog
 
     fun showSingleAlertDialog() {
-        val items = arrayOf("上报者1", "上报者2", "东港监理", "莒县监理", "领导")
+        val items = arrayOf("监理1", "监理2", "东港区", "莒县", "市领导")
         val values = arrayOf("guest", "www", "donggang", "juxian", "leader")
         val alertBuilder = AlertDialog.Builder(this)
         alertBuilder.setTitle("请选择测试账号")
@@ -153,10 +153,10 @@ class LoginActivity : BaseActivity() {
         SharedPreferencesUtil.save(mContext, "usr", user.username)
         SharedPreferencesUtil.save(mContext, "pwd", pwd)
 
-        if (user.role == 3) {
-            startActivity(Intent(mContext, Main2Activity::class.java))
-        } else {
-            startActivity(Intent(mContext, MainActivity::class.java))
+        when (user.role) {
+            1 -> startActivity(Intent(mContext, MainActivity::class.java))
+            2 -> startActivity(Intent(mContext, Main2Activity::class.java))
+            3 -> startActivity(Intent(mContext, Main3Activity::class.java))
         }
     }
 

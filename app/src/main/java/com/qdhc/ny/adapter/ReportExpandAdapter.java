@@ -14,10 +14,11 @@ import com.qdhc.ny.bmob.Report;
 import com.qdhc.ny.common.Constant;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import static com.bigkoo.pickerview.view.WheelTime.dateFormat;
 
 /**
  * @Author wj
@@ -26,8 +27,6 @@ import java.util.List;
  * @Url http://www.chuangze.cn
  */
 public class ReportExpandAdapter extends BaseExpandableListAdapter {
-
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     // 子选项最大的数量
     private final int MAX_CHILD_COUNT = 7;

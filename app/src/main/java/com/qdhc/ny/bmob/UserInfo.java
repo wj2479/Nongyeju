@@ -35,9 +35,14 @@ public class UserInfo extends BmobUser implements Serializable {
     private int role;
 
     /**
-     * 管辖区域，只有role = 2 时有效
+     *
      */
     private String district;
+
+    /**
+     * 管辖区域ID
+     */
+    private int areaId;
 
     public String getNickName() {
         return nickName;
@@ -87,6 +92,14 @@ public class UserInfo extends BmobUser implements Serializable {
         this.district = district;
     }
 
+    public int getAreaId() {
+        return areaId;
+    }
+
+    public void setAreaId(int areaId) {
+        this.areaId = areaId;
+    }
+
     @Override
     public String toString() {
         return "UserInfo{" +
@@ -95,6 +108,8 @@ public class UserInfo extends BmobUser implements Serializable {
                 ", gender=" + gender +
                 ", avatar=" + avatar +
                 ", role=" + role +
+                ", district='" + district + '\'' +
+                ", areaId=" + areaId +
                 '}';
     }
 }

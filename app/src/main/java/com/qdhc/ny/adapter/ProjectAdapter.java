@@ -31,7 +31,7 @@ public class ProjectAdapter extends BaseQuickAdapter<Project, BaseViewHolder> {
         helper.setText(R.id.tv_title, item.getName());
 
         if (item.getSchedules() != null && item.getSchedules().size() > 0) {
-            Integer schedule = item.getSchedules().get(0).getSchedule();
+            int schedule = item.getSchedules().get(0).getSchedule();
             helper.setText(R.id.tv_status, "进度: " + schedule + "%");
         } else {
             helper.setText(R.id.tv_status, "进度: 0%");
@@ -39,8 +39,8 @@ public class ProjectAdapter extends BaseQuickAdapter<Project, BaseViewHolder> {
         helper.setText(R.id.tv_introduce, item.getIntroduce());
 //        helper.setText(R.id.tv_village, item.getVillage());
 //        helper.setText(R.id.tv_district, item.getDistrict());
-//        helper.setText(R.id.tv_content, item.getDescription());
-//        helper.setText(R.id.tv_from, "" + item.getFrom());
+
+        helper.setText(R.id.tv_from, "创建时间: " + item.getCreatedAt().substring(0, 10));
 
     }
 

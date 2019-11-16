@@ -1,11 +1,15 @@
 package com.qdhc.ny.adapter;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.qdhc.ny.R;
+import com.qdhc.ny.activity.SignInListActivity;
+import com.qdhc.ny.activity.TraceRecordActivity;
 import com.qdhc.ny.bmob.UserInfo;
 
 import java.util.List;
@@ -17,24 +21,38 @@ import java.util.List;
 public class ContactsAdapter extends BaseQuickAdapter<UserInfo, BaseViewHolder> {
     Activity mContext;
 
-    String[] roles;
-
     public ContactsAdapter(Activity mContext, @Nullable List<UserInfo> data) {
-        super(R.layout.item_select_manager, data);
+        super(R.layout.item_contacts, data);
         this.mContext = mContext;
-        roles = mContext.getResources().getStringArray(R.array.roles);
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, UserInfo item) {
+    protected void convert(BaseViewHolder helper, final UserInfo item) {
         //姓名
         helper.setText(R.id.tv_name, item.getNickName());
         //手机号
-        helper.setText(R.id.tv_phone, "手机号:" + item.getMobilePhoneNumber());
+        helper.setText(R.id.tv_phone, "手机号:" + item.getMobilePhoneNumber() == null ? "未知" : item.getMobilePhoneNumber());
         //用户名
         helper.setText(R.id.tv_username, "用户名:" + item.getUsername());
 
-        helper.setText(R.id.tv_role_name, roles[item.getRole() - 1]);
+
+        helper.setOnClickListener(R.id.tv_sign, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, SignInListActivity.class);
+                intent.putExtra("userInfo", item);
+                mContext.startActivity(intent);
+            }
+        });
+        helper.setOnClickListener(R.id.tv_track, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, TraceRecordActivity.class);
+                intent.putExtra("userInfo", item);
+                mContext.startActivity(intent);
+            }
+        });
+
     }
 
 }

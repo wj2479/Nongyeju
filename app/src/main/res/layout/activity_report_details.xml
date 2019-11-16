@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/backgroundColor"
@@ -40,7 +39,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="工程名称"
-                        android:textSize="@dimen/sp_16"/>
+                        android:textSize="@dimen/sp_16"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/nameTv"
@@ -64,7 +64,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="上报位置"
-                        android:textSize="@dimen/sp_16" />
+                        android:textSize="@dimen/sp_16"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/locationTv"
@@ -86,10 +87,35 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="上报时间"
-                        android:textSize="@dimen/sp_16"/>
+                        android:textSize="@dimen/sp_16"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/timeTv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"></TextView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/personLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_45"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/dp_8"
+                    android:paddingRight="@dimen/dp_8">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="上  报  人"
+                        android:textSize="@dimen/sp_16"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/personTv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"></TextView>
@@ -110,6 +136,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="工作内容"
+                        android:textStyle="bold"
                         android:textSize="@dimen/sp_16"/>
 
                     <TextView
@@ -138,7 +165,8 @@
                         android:layout_height="wrap_content"
                         android:paddingBottom="@dimen/dp_8"
                         android:text="存在问题"
-                        android:textSize="@dimen/sp_16"/>
+                        android:textSize="@dimen/sp_16"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/edt_question"
@@ -164,7 +192,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="解决办法"
-                        android:textSize="@dimen/sp_16"/>
+                        android:textSize="@dimen/sp_16"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/edt_method"
@@ -191,7 +220,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="质量自检"
-                        android:textSize="@dimen/sp_16"/>
+                        android:textSize="@dimen/sp_16"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/edt_check"
@@ -219,7 +249,8 @@
                         android:layout_height="wrap_content"
                         android:paddingBottom="@dimen/dp_8"
                         android:text="现场图片/视频"
-                        android:textSize="@dimen/sp_16"/>
+                        android:textSize="@dimen/sp_16"
+                        android:textStyle="bold" />
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/rlv"

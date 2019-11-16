@@ -22,7 +22,6 @@ import android.view.KeyEvent
 import cn.bmob.v3.BmobQuery
 import cn.bmob.v3.exception.BmobException
 import cn.bmob.v3.listener.FindListener
-import cn.bmob.v3.listener.SaveListener
 import com.amap.api.location.*
 import com.amap.api.maps.AMapUtils
 import com.amap.api.maps.model.LatLng
@@ -39,7 +38,10 @@ import com.qdhc.ny.bmob.*
 import com.qdhc.ny.common.Constant
 import com.qdhc.ny.common.ProjectData
 import com.qdhc.ny.eventbus.ProjectEvent
-import com.qdhc.ny.fragment.*
+import com.qdhc.ny.fragment.IndexFragment
+import com.qdhc.ny.fragment.MyFragment
+import com.qdhc.ny.fragment.ProjectListFragment
+import com.qdhc.ny.fragment.ReportFragment
 import com.qdhc.ny.utils.SharedPreferencesUtils
 import com.sj.core.utils.SharedPreferencesUtil
 import com.sj.core.utils.ToastUtil
@@ -54,7 +56,7 @@ class MainActivity : BaseActivity() {
     // 记录上一次上传的位置信息
     var lastUploadLocation: AMapLocation? = null
     // 上传数据之间最小的距离
-    val MIN_DISTANCE = 300
+    val MIN_DISTANCE = 200
     // 允许的最大精度误差
     val MAX_ACCURACY = 80
 
@@ -126,7 +128,7 @@ class MainActivity : BaseActivity() {
         var fragmentList = ArrayList<Fragment>()
         fragmentList.add(IndexFragment())
         fragmentList.add(ProjectListFragment())
-        fragmentList.add(ContactsFragment())
+        fragmentList.add(MyFragment())
         fragmentList.add(ReportFragment())
         fragmentList.add(MyFragment())
         //viewpager加载adapter
@@ -400,8 +402,10 @@ class MainActivity : BaseActivity() {
                     var lastLatLng = LatLng(lastUploadLocation!!.latitude, lastUploadLocation!!.longitude)
                     var latLng = LatLng(location.latitude, location.longitude)
                     var distance = AMapUtils.calculateLineDistance(lastLatLng, latLng)
-                    if (distance < MIN_DISTANCE) {   // 判断两次之间的距离
-                        Log.e("AMAP", "两次定位之间距离太近:" + distance + "米")
+
+                    var bearingto = location.bearingTo(lastUploadLocation)
+                    if (distance < MIN_DISTANCE && bearingto < 60) {   // 判断两次之间的距离  并且夹角小于60度
+                        Log.e("AMAP", "两次定位之间距离:" + distance + "米,夹角:" + bearingto)
                         return@AMapLocationListener
                     }
                 }
@@ -447,16 +451,16 @@ class MainActivity : BaseActivity() {
                 }
                 tracks.remark = sb_temp.toString()     // 备注信息
 
-                tracks.save(object : SaveListener<String>() {
-                    override fun done(objectId: String?, e: BmobException?) {
-                        if (e == null) {
-                            lastUploadLocation = location
-                            Log.e("AMAP", "轨迹上传成功")
-                        } else {
-                            Log.e("AMAP", "轨迹上传失败:" + e.toString())
-                        }
-                    }
-                })
+//                tracks.save(object : SaveListener<String>() {
+//                    override fun done(objectId: String?, e: BmobException?) {
+//                        if (e == null) {
+//                            lastUploadLocation = location
+//                            Log.e("AMAP", "轨迹上传成功")
+//                        } else {
+//                            Log.e("AMAP", "轨迹上传失败:" + e.toString())
+//                        }
+//                    }
+//                })
                 ProjectData.getInstance().location = location
             }
         }

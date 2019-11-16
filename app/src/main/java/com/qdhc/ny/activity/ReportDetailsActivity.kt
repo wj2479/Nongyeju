@@ -16,6 +16,8 @@ import com.qdhc.ny.bmob.ContradictPic
 import com.qdhc.ny.bmob.Project
 import com.qdhc.ny.bmob.Report
 import com.qdhc.ny.common.Constant
+import com.qdhc.ny.utils.SharedPreferencesUtils
+import com.qdhc.ny.utils.UserInfoUtils
 import com.sj.core.utils.ToastUtil
 import kotlinx.android.synthetic.main.activity_report_details.*
 import kotlinx.android.synthetic.main.layout_title_theme.*
@@ -60,7 +62,7 @@ class ReportDetailsActivity : BaseActivity() {
         var project = intent.getSerializableExtra("project") as Project
 
         var report = intent.getSerializableExtra("report") as Report
-        var type = intent.getIntExtra("type", 0)
+        var type = report.type
 
         when (type) {
             Constant.REPORT_TYPE_DAY -> title_tv_title.text = "日报详情"
@@ -75,6 +77,20 @@ class ReportDetailsActivity : BaseActivity() {
         edt_question.text = report.question
         edt_method.text = report.method
         edt_check.text = report.check
+
+        var userInfo = SharedPreferencesUtils.loadLogin(this)
+
+        if (userInfo.objectId.equals(report.uid)) {
+            personLayout.visibility = View.GONE
+        } else {
+            UserInfoUtils.getInfoByObjectId(report.uid, { userInfo ->
+                if (userInfo != null) {
+                    personTv.text = userInfo.nickName
+                } else {
+                    personLayout.visibility = View.GONE
+                }
+            })
+        }
 
         getImags(report)
     }

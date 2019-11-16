@@ -10,16 +10,16 @@ import android.view.View
 import cn.bmob.v3.BmobQuery
 import cn.bmob.v3.exception.BmobException
 import cn.bmob.v3.listener.FindListener
-import cn.bmob.v3.listener.QueryListener
 import cn.bmob.v3.listener.UpdateListener
 import com.qdhc.ny.R
 import com.qdhc.ny.adapter.ImageAdapter
 import com.qdhc.ny.base.BaseActivity
-import com.qdhc.ny.base.BaseApplication
 import com.qdhc.ny.bmob.ContradictPic
 import com.qdhc.ny.bmob.Contradiction
 import com.qdhc.ny.bmob.UserInfo
 import com.qdhc.ny.utils.SharedPreferencesUtils
+import com.qdhc.ny.utils.UserInfoUtils
+import com.qdhc.ny.utils.UserInfoUtils.getInfoByObjectId
 import com.sj.core.utils.ToastUtil
 import kotlinx.android.synthetic.main.activity_contradiction_info.*
 import kotlinx.android.synthetic.main.layout_title_theme.*
@@ -140,7 +140,7 @@ class ContradictionInfoActivity : BaseActivity() {
 
             resultManLayout.visibility = View.VISIBLE
 
-            getInfoByObjectId(contradiction.resultId, object : IResult {
+            getInfoByObjectId(contradiction.resultId, object : UserInfoUtils.IResult {
                 override fun onReslt(userInfo: UserInfo?) {
                     resultManTv.text = if (userInfo == null) "未知" else userInfo.nickName
                 }
@@ -178,45 +178,17 @@ class ContradictionInfoActivity : BaseActivity() {
         if (userInfo.role != 1) {
             uploadLayout.visibility = View.VISIBLE
 
-            getInfoByObjectId(contradiction.uploader, object : IResult {
+            getInfoByObjectId(contradiction.uploader, object : UserInfoUtils.IResult {
                 override fun onReslt(userInfo: UserInfo?) {
                     uploaderTv.text = if (userInfo == null) "上报人: 未知" else "上报人: " + userInfo.nickName
                     uploadphoneTv.text = if (userInfo == null) "" else "电话: " + userInfo.mobilePhoneNumber
                 }
             })
-
         }
 
         getImags()
     }
 
-    fun getInfoByObjectId(objectId: String?, runnable: IResult) {
-        if (TextUtils.isEmpty(objectId)) {
-            runnable.onReslt(null)
-            return
-        }
-
-        val userInfo = BaseApplication.userInfoMap[objectId]
-        if (userInfo == null) {
-            val bmobQuery = BmobQuery<UserInfo>()
-            bmobQuery.getObject(objectId, object : QueryListener<UserInfo>() {
-                override fun done(uInfo: UserInfo?, e: BmobException?) {
-                    if (e == null) {
-                        runnable.onReslt(uInfo)
-                        BaseApplication.userInfoMap[uInfo?.objectId] = uInfo
-                    } else {
-                        runnable.onReslt(null)
-                    }
-                }
-            })
-        } else {
-            runnable.onReslt(userInfo)
-        }
-    }
-
-    interface IResult {
-        fun onReslt(userInfo: UserInfo?)
-    }
 
     fun getImags() {
         var query = BmobQuery<ContradictPic>()

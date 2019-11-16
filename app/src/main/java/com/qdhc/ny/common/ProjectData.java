@@ -3,6 +3,7 @@ package com.qdhc.ny.common;
 import com.amap.api.location.AMapLocation;
 import com.qdhc.ny.bmob.Notice;
 import com.qdhc.ny.bmob.Project;
+import com.qdhc.ny.bmob.UserInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,11 @@ public class ProjectData {
      * 公告列表
      */
     private List<Notice> notices = new ArrayList<>();
+
+    /**
+     * 区县监理列表
+     */
+    private List<UserInfo> userInfos = new ArrayList<>();
 
     private static ProjectData mPorjectData = null;
 
@@ -67,5 +73,13 @@ public class ProjectData {
 
     public void setNotices(List<Notice> notices) {
         this.notices = notices;
+    }
+
+    public List<UserInfo> getUserInfos() {
+        return userInfos;
+    }
+
+    public void setUserInfos(List<UserInfo> userInfos) {
+        this.userInfos = userInfos;
     }
 }

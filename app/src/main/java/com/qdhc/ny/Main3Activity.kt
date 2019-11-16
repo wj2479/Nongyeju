@@ -7,14 +7,13 @@ import com.google.gson.Gson
 import com.qdhc.ny.adapter.TabFragmentPagerAdapter
 import com.qdhc.ny.base.BaseActivity
 import com.qdhc.ny.bean.TabIconBean
-import com.qdhc.ny.fragment.ContactsFragment
-import com.qdhc.ny.fragment.ContradictionListFragment
+import com.qdhc.ny.fragment.ContactsTabFragment
 import com.qdhc.ny.fragment.MyFragment
-import com.qdhc.ny.utils.SharedPreferencesUtils
+import com.qdhc.ny.fragment.ProjectTabFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
-class Main2Activity : BaseActivity() {
+class Main3Activity : BaseActivity() {
 
     var gson = Gson()
     override fun intiLayout(): Int {
@@ -37,15 +36,12 @@ class Main2Activity : BaseActivity() {
             R.drawable.ic_my_select)
 
     override fun initView() {
-
-        var userInfo = SharedPreferencesUtils.loadLogin(this)
-
         //获取数据 在values/arrays.xml中进行定义然后调用
         var tabTitle = resources.getStringArray(R.array.tab2_titles)
         //将fragment装进列表中
         var fragmentList = ArrayList<Fragment>()
-        fragmentList.add(ContradictionListFragment(userInfo.areaId, true))
-        fragmentList.add(ContactsFragment(userInfo.areaId, true))
+        fragmentList.add(ProjectTabFragment())
+        fragmentList.add(ContactsTabFragment())
         fragmentList.add(MyFragment())
         //viewpager加载adapter
         vp.adapter = TabFragmentPagerAdapter(supportFragmentManager, fragmentList, tabTitle)

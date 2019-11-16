@@ -53,7 +53,7 @@ class MyFragment : BaseFragment() {
 
         btn_exit.setOnClickListener {
             //退出
-            upData()
+            logOut()
         }
         ll_user.setOnClickListener {
             //更新个人信息
@@ -76,11 +76,14 @@ class MyFragment : BaseFragment() {
     }
 
     override fun initData() {
+
+        var array = activity?.resources?.getStringArray(R.array.areas)
+
         when (userInfo.role) {
             0 -> tv_job.text = "管理员"
-            1 -> tv_job.text = "上报员"
-            2 -> tv_job.text = "监理      管辖区域：" + userInfo.district
-            3 -> tv_job.text = "分管领导"
+            1 -> tv_job.text = "负责区域:" + array?.get(userInfo.areaId - 1)
+            2 -> tv_job.text = "区县领导"
+            3 -> tv_job.text = "市领导"
         }
     }
 
@@ -90,7 +93,7 @@ class MyFragment : BaseFragment() {
     /***
      * 退出
      */
-    fun upData() {
+    fun logOut() {
         BmobUser.logOut();
         startActivity(Intent(activity, LoginActivity::class.java))
         AcitityManagerUtil.getInstance().finishAllActivity()

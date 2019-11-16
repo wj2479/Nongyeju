@@ -1,39 +1,20 @@
 package com.qdhc.ny.fragment
 
 import android.content.Intent
-import android.os.Bundle
 import android.support.v4.app.Fragment
 import com.baoyz.actionsheet.ActionSheet
 import com.qdhc.ny.activity.AddReportActivity
 import com.qdhc.ny.adapter.MyFragmentPagerAdapter
 import com.qdhc.ny.base.BaseFragment
-import com.qdhc.ny.common.Constant
-import kotlinx.android.synthetic.main.fragment_report.*
+import kotlinx.android.synthetic.main.fragment_project_tab.*
 
 
-class ReportFragment : BaseFragment(), ActionSheet.ActionSheetListener {
-
-    private var mParam1: String? = null
-    private var mParam2: String? = null
+class ProjectTabFragment : BaseFragment(), ActionSheet.ActionSheetListener {
 
     lateinit var mAdapter: MyFragmentPagerAdapter
 
-    companion object {
-        private val ARG_PARAM1 = "param1"
-        private val ARG_PARAM2 = "param2"
-
-        fun newInstance(param1: String, param2: String): ReportFragment {
-            val fragment = ReportFragment()
-            val args = Bundle()
-            args.putString(ARG_PARAM1, param1)
-            args.putString(ARG_PARAM2, param2)
-            fragment.arguments = args
-            return fragment
-        }
-    }
-
     override fun intiLayout(): Int {
-        return com.qdhc.ny.R.layout.fragment_report
+        return com.qdhc.ny.R.layout.fragment_project_tab
     }
 
     override fun initView() {
@@ -44,15 +25,15 @@ class ReportFragment : BaseFragment(), ActionSheet.ActionSheetListener {
      * Description：初始化FragmentPagerAdapter适配器并给ViewPager设置上该适配器，最后关联TabLayout和ViewPager
      */
     private fun setupWithViewPager() {
-        var mTitles = context?.resources?.getStringArray(com.qdhc.ny.R.array.report_titles)!!
+        var mTitles = arrayOf("东港区", "莒县", "五莲")
         mTitles.forEach { title ->
             mTabLayout.addTab(mTabLayout.newTab().setText(title))
         }
 
         val mFragments = ArrayList<Fragment>()
-        mFragments.add(DayReportFragment(Constant.REPORT_TYPE_DAY))
-        mFragments.add(DayReportFragment(Constant.REPORT_TYPE_WEEK))
-        mFragments.add(DayReportFragment(Constant.REPORT_TYPE_MONTH))
+        mFragments.add(ContradictionListFragment(1, false))
+        mFragments.add(ContradictionListFragment(2, false))
+        mFragments.add(ContradictionListFragment(3, false))
 
         mAdapter = MyFragmentPagerAdapter(childFragmentManager)
         mAdapter.addTitlesAndFragments(mTitles, mFragments)
