@@ -15,6 +15,7 @@ import com.qdhc.ny.utils.BaseUtil
 import com.qdhc.ny.utils.SharedPreferencesUtils
 import com.sj.core.utils.SharedPreferencesUtil
 import com.sj.core.utils.ToastUtil
+import com.tencent.bugly.crashreport.CrashReport
 import kotlinx.android.synthetic.main.activity_login.*
 
 
@@ -152,6 +153,8 @@ class LoginActivity : BaseActivity() {
         SharedPreferencesUtils.saveLogin(mContext, user)
         SharedPreferencesUtil.save(mContext, "usr", user.username)
         SharedPreferencesUtil.save(mContext, "pwd", pwd)
+
+        CrashReport.setUserId(user.username)
 
         when (user.role) {
             1 -> startActivity(Intent(mContext, MainActivity::class.java))

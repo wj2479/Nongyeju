@@ -15,6 +15,7 @@ import com.qdhc.ny.base.BaseActivity
 import com.qdhc.ny.bmob.UserInfo
 import com.qdhc.ny.utils.SharedPreferencesUtils
 import com.sj.core.utils.SharedPreferencesUtil
+import com.tencent.bugly.crashreport.CrashReport
 
 class StartActivity : BaseActivity() {
 
@@ -86,6 +87,8 @@ class StartActivity : BaseActivity() {
     fun onLoginSuccess(user: UserInfo, pwd: String) {
         SharedPreferencesUtils.saveLogin(mContext, user)
         SharedPreferencesUtil.save(mContext, "pwd", pwd)
+
+        CrashReport.setUserId(user.username)
 
         when (user.role) {
             1 -> startActivity(Intent(mContext, MainActivity::class.java))

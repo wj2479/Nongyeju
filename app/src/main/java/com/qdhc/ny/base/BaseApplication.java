@@ -7,9 +7,11 @@ import android.os.Bundle;
 import android.os.Process;
 import android.support.multidex.MultiDexApplication;
 
+import com.qdhc.ny.BuildConfig;
 import com.qdhc.ny.bmob.UserInfo;
 import com.qdhc.ny.common.Constant;
 import com.sj.core.app.ProjectInit;
+import com.tencent.bugly.crashreport.CrashReport;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -63,6 +65,10 @@ public class BaseApplication extends MultiDexApplication {
         }).start();
 
         Bmob.initialize(this, "5f221eb7f4e0909d78eb5650d207fb86");
+
+        // 腾讯bugly初始化
+        CrashReport.initCrashReport(getApplicationContext(), "acadddbef3", BuildConfig.DEBUG);
+
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
