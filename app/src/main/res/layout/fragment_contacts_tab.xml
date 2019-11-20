@@ -6,20 +6,22 @@
     android:orientation="vertical">
 
     <RelativeLayout
+        android:id="@+id/titleLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="@dimen/dp_50">
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_50"
+            android:layout_height="match_parent"
             android:background="@color/white"
             android:gravity="center"
             android:text="监理列表"
             android:textSize="@dimen/textsize_9" />
 
+        <View
+            style="@style/line_vertical"
+            android:layout_alignParentBottom="true"></View>
     </RelativeLayout>
-
-    <View style="@style/line_vertical"></View>
 
 
     <!--tabIndicatorColor：指示器的颜色-->

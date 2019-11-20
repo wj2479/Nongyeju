@@ -4,6 +4,7 @@ import android.content.Intent
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
+import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import cn.bmob.v3.BmobQuery
@@ -14,6 +15,7 @@ import com.qdhc.ny.adapter.ReportAdapter
 import com.qdhc.ny.base.BaseActivity
 import com.qdhc.ny.bmob.Project
 import com.qdhc.ny.bmob.Report
+import com.qdhc.ny.bmob.UserInfo
 import com.qdhc.ny.common.Constant
 import com.yanzhenjie.recyclerview.swipe.widget.DefaultItemDecoration
 import kotlinx.android.synthetic.main.activity_notice.*
@@ -26,6 +28,8 @@ class ReportListActivity : BaseActivity() {
 
     lateinit var project: Project
 
+    lateinit var user: UserInfo
+
     var type = 0
 
     override fun intiLayout(): Int {
@@ -34,10 +38,21 @@ class ReportListActivity : BaseActivity() {
 
     override fun initView() {
 
+        user = intent.getSerializableExtra("user") as UserInfo
+        if (user.role == 1) {
+            title_tv_right.visibility = View.VISIBLE
+            title_tv_right.text = "添加  "
+        }
     }
 
     override fun initClick() {
         title_iv_back.setOnClickListener { finish() }
+        title_tv_right.setOnClickListener {
+            var intent = Intent(this, AddReportActivity::class.java)
+            intent.putExtra("project", project)
+            intent.putExtra("type", type)
+            startActivity(intent)
+        }
     }
 
     override fun initData() {
@@ -50,7 +65,10 @@ class ReportListActivity : BaseActivity() {
             Constant.REPORT_TYPE_MONTH -> title_tv_title.text = project.name + "工程月报列表"
         }
         initRefresh()
+    }
 
+    override fun onResume() {
+        super.onResume()
         getData()
     }
 
@@ -96,6 +114,7 @@ class ReportListActivity : BaseActivity() {
                 object : FindListener<Report>() {
                     override fun done(list: List<Report>?, e: BmobException?) {
                         if (e == null) {
+                            reports.clear()
                             reports.addAll(list!!)
                             mAdapter.notifyDataSetChanged()
                         } else {

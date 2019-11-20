@@ -2,6 +2,11 @@ package com.qdhc.ny.activity
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Handler
+import cn.bmob.v3.datatype.BmobFile
+import cn.bmob.v3.exception.BmobException
+import cn.bmob.v3.listener.UpdateListener
+import cn.bmob.v3.listener.UploadFileListener
 import com.luck.picture.lib.PictureSelector
 import com.luck.picture.lib.config.PictureConfig
 import com.luck.picture.lib.config.PictureMimeType
@@ -14,6 +19,7 @@ import com.sj.core.utils.ImageLoaderUtil
 import com.sj.core.utils.ToastUtil
 import kotlinx.android.synthetic.main.activity_user_info.*
 import kotlinx.android.synthetic.main.layout_title_theme.*
+import java.io.File
 
 /**
  * 个人信息修改
@@ -27,11 +33,12 @@ class UserInfoActivity : BaseActivity() {
     }
 
     override fun initData() {
-        user = SharedPreferencesUtils.loadLogin(this)
+        user = intent.getSerializableExtra("user") as UserInfo
         edt_nickname.setText(user.nickName)
-//        //头像
-//        ImageLoaderUtil.loadCorners(mContext, user.headimg, iv_photo, -1, R.drawable.ic_defult_user)
-
+        //头像
+        if (user.avatar != null) {
+            ImageLoaderUtil.loadCorners(mContext, user.avatar.url, iv_photo, -1, R.drawable.ic_defult_user)
+        }
     }
 
     override fun initClick() {
@@ -40,11 +47,8 @@ class UserInfoActivity : BaseActivity() {
             if (edt_nickname.text.isNullOrEmpty()) {
                 ToastUtil.show(mContext, "请输入姓名")
             } else {
-                if (iv_photo.getTag(R.id.TAG) != null) {
-//                    upImages(iv_photo.getTag(R.id.TAG).toString())
-                } else {
-//                    upUser("", edt_nickname.text.toString())
-                }
+                showDialog("正在保存...")
+                upUser(iv_photo.getTag(R.id.TAG).toString(), edt_nickname.text.toString())
             }
         })
         //头像
@@ -55,22 +59,22 @@ class UserInfoActivity : BaseActivity() {
                     .maxSelectNum(Constant.MAXSELECTNUM)// 最大图片选择数量
                     .minSelectNum(1)// 最小选择数量
                     .imageSpanCount(4)// 每行显示个数
-                    .selectionMode(PictureConfig.SINGLE)// 多选
+                    .selectionMode(PictureConfig.SINGLE)// 单选
                     .previewImage(true)// 是否可预览图片
                     .isCamera(true)// 是否显示拍照按钮
                     .isZoomAnim(true)// 图片列表点击 缩放效果 默认true
                     //.imageFormat(PictureMimeType.PNG)// 拍照保存图片格式后缀,默认jpeg
                     //.setOutputCameraPath("/CustomPath")// 自定义拍照保存路径
-                    .enableCrop(false)// 是否裁剪
+                    .enableCrop(true)// 是否裁剪
                     .compress(true)// 是否压缩
                     .synOrAsy(true)//同步true或异步false 压缩 默认同步
                     //.compressSavePath(getPath())//压缩图片保存地址
                     //.sizeMultiplier(0.5f)// glide 加载图片大小 0~1之间 如设置 .glideOverride()无效
                     .glideOverride(160, 160)// glide 加载宽高，越小图片列表越流畅，但会影响列表图片浏览的清晰度
-                    //  .withAspectRatio(aspect_ratio_x, aspect_ratio_y)// 裁剪比例 如16:9 3:2 3:4 1:1 可自定义
+                    .withAspectRatio(1, 1)// 裁剪比例 如16:9 3:2 3:4 1:1 可自定义
                     // .hideBottomControls(if (cb_hide.isChecked()) false else true)// 是否显示uCrop工具栏，默认不显示
                     //      .isGif(cb_isGif.isChecked())// 是否显示gif图片
-                    //    .freeStyleCropEnabled(true)// 裁剪框是否可拖拽
+                    .freeStyleCropEnabled(true)// 裁剪框是否可拖拽
                     //    .circleDimmedLayer(cb_crop_circular.isChecked())// 是否圆形裁剪
                     //    .showCropFrame(cb_showCropFrame.isChecked())// 是否显示裁剪矩形边框 圆形裁剪时建议设为false
                     //   .showCropGrid(cb_showCropGrid.isChecked())// 是否显示裁剪矩形网格 圆形裁剪时建议设为false
@@ -95,16 +99,15 @@ class UserInfoActivity : BaseActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (data != null) {
-
             if (resultCode == Activity.RESULT_OK) {
                 when (requestCode) {
                     PictureConfig.CHOOSE_REQUEST -> {
                         // 图片选择结果回调
-                        PictureSelector.obtainMultipleResult(data)[0].compressPath
+                        var path = PictureSelector.obtainMultipleResult(data)[0].compressPath
                         //头像
-                        ImageLoaderUtil.loadCorners(mContext, PictureSelector.obtainMultipleResult(data)[0].compressPath,
+                        ImageLoaderUtil.loadCorners(mContext, path,
                                 iv_photo, -1, R.drawable.ic_defult_user)
-                        iv_photo.setTag(R.id.TAG, PictureSelector.obtainMultipleResult(data)[0].compressPath)
+                        iv_photo.setTag(R.id.TAG, path)
                         // 例如 LocalMedia 里面返回三种path
                         // 1.media.getPath(); 为原图path
                         // 2.media.getCutPath();为裁剪后path，需判断media.isCut();是否为true
@@ -117,13 +120,54 @@ class UserInfoActivity : BaseActivity() {
         }
     }
 
+    private fun upUser(path: String, nickName: String) {
+        user.nickName = nickName
+        if (path != null) {
+            var pathFile = File(path)
+            if (pathFile.exists()) {
+                var bmobFile = BmobFile(pathFile)
+                bmobFile.uploadblock(object : UploadFileListener() {
+                    override fun done(e: BmobException?) {
+                        if (e == null) {
+                            user.avatar = bmobFile
+                            update()
+                        } else {
+                            ToastUtil.show(this@UserInfoActivity, "保存失败：" + e.toString())
+                        }
+                    }
+                });
+            } else {
+                update()
+            }
+        } else {
+            update()
+        }
+    }
+
+    fun update() {
+        user.update(object : UpdateListener() {
+            override fun done(e: BmobException?) {
+                if (e == null) {
+                    showDialog("保存成功...")
+                    SharedPreferencesUtils.saveLogin(this@UserInfoActivity, user)
+                    Handler().postDelayed({
+                        dismissDialogNow()
+                        setResult(Activity.RESULT_OK)
+                        finish()
+                    }, 1500)
+                } else {
+                    ToastUtil.show(this@UserInfoActivity, "保存失败：" + e.toString())
+                }
+            }
+        })
+    }
+
 
     override fun initView() {
         title_tv_title.text = "个人中心"
         title_iv_back.setOnClickListener({
             finish()
         })
-
     }
 
 }

@@ -160,7 +160,9 @@ class LoginActivity : BaseActivity() {
             1 -> startActivity(Intent(mContext, MainActivity::class.java))
             2 -> startActivity(Intent(mContext, Main2Activity::class.java))
             3 -> startActivity(Intent(mContext, Main3Activity::class.java))
+            4 -> startActivity(Intent(mContext, Main4Activity::class.java))
         }
+
     }
 
 }

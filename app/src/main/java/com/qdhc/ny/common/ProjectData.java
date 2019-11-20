@@ -4,9 +4,12 @@ import com.amap.api.location.AMapLocation;
 import com.qdhc.ny.bmob.Notice;
 import com.qdhc.ny.bmob.Project;
 import com.qdhc.ny.bmob.UserInfo;
+import com.qdhc.ny.bmob.Villages;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author wj
@@ -35,6 +38,16 @@ public class ProjectData {
      * 区县监理列表
      */
     private List<UserInfo> userInfos = new ArrayList<>();
+
+    /**
+     * 所有村落的列表
+     */
+    private List<Villages> villages = new ArrayList<>();
+
+    /**
+     * 所有村落的对照
+     */
+    private Map<String, Villages> villageMap = new HashMap<>();
 
     private static ProjectData mPorjectData = null;
 
@@ -81,5 +94,21 @@ public class ProjectData {
 
     public void setUserInfos(List<UserInfo> userInfos) {
         this.userInfos = userInfos;
+    }
+
+    public List<Villages> getVillages() {
+        return villages;
+    }
+
+    public void setVillages(List<Villages> villages) {
+        this.villages = villages;
+    }
+
+    public Map<String, Villages> getVillageMap() {
+        return villageMap;
+    }
+
+    public void setVillageMap(Map<String, Villages> villageMap) {
+        this.villageMap = villageMap;
     }
 }

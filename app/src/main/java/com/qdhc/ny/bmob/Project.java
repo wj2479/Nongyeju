@@ -23,14 +23,25 @@ public class Project extends BmobObject implements Serializable {
      * 项目介绍
      */
     String introduce;
+
+    /**
+     * 监理负责人ID
+     */
+    private String manager;
+
+    /**
+     * 项目标签
+     */
+    String tags;
+
     /**
      * 所属区域
      */
     int area;
     /**
-     * 监理负责人ID
+     * 所属村落ID
      */
-    String manager;
+    String village;
 
     /**
      * 项目的进度记录
@@ -66,14 +77,6 @@ public class Project extends BmobObject implements Serializable {
 
     public void setIntroduce(String introduce) {
         this.introduce = introduce;
-    }
-
-    public int getArea() {
-        return area;
-    }
-
-    public void setArea(int area) {
-        this.area = area;
     }
 
     public String getManager() {
@@ -116,13 +119,38 @@ public class Project extends BmobObject implements Serializable {
         this.monthRreports = monthRreports;
     }
 
+    public String getTags() {
+        return tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
+    }
+
+    public String getVillage() {
+        return village;
+    }
+
+    public void setVillage(String village) {
+        this.village = village;
+    }
+
+    public int getArea() {
+        return area;
+    }
+
+    public void setArea(int area) {
+        this.area = area;
+    }
+
     @Override
     public String toString() {
         return "Project{" +
                 "name='" + name + '\'' +
                 ", introduce='" + introduce + '\'' +
-                ", area=" + area +
                 ", manager='" + manager + '\'' +
+                ", tags='" + tags + '\'' +
+                ", village=" + village +
                 ", schedules=" + schedules +
                 ", dayRreports=" + dayRreports +
                 ", weekRreports=" + weekRreports +

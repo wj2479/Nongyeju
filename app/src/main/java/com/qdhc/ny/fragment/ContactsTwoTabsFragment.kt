@@ -1,32 +1,20 @@
 package com.qdhc.ny.fragment
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.support.v4.app.Fragment
 import com.baoyz.actionsheet.ActionSheet
+import com.qdhc.ny.R
 import com.qdhc.ny.activity.AddReportActivity
 import com.qdhc.ny.adapter.MyFragmentPagerAdapter
 import com.qdhc.ny.base.BaseFragment
-import com.qdhc.ny.common.Constant
-import kotlinx.android.synthetic.main.fragment_report.*
+import kotlinx.android.synthetic.main.fragment_contacts_tab.*
 
-
-@SuppressLint("ValidFragment")
-class ReportFragment : BaseFragment(), ActionSheet.ActionSheetListener {
+class ContactsTwoTabsFragment : BaseFragment(), ActionSheet.ActionSheetListener {
 
     lateinit var mAdapter: MyFragmentPagerAdapter
 
-    var areaId = 0
-
-    var isShowTitle = true
-
-    init {
-        this.areaId = areaId
-        this.isShowTitle = isShowTitle
-    }
-
     override fun intiLayout(): Int {
-        return com.qdhc.ny.R.layout.fragment_report
+        return com.qdhc.ny.R.layout.fragment_contacts_tab
     }
 
     override fun initView() {
@@ -37,15 +25,12 @@ class ReportFragment : BaseFragment(), ActionSheet.ActionSheetListener {
      * Description：初始化FragmentPagerAdapter适配器并给ViewPager设置上该适配器，最后关联TabLayout和ViewPager
      */
     private fun setupWithViewPager() {
-        var mTitles = context?.resources?.getStringArray(com.qdhc.ny.R.array.report_titles)!!
-        mTitles.forEach { title ->
-            mTabLayout.addTab(mTabLayout.newTab().setText(title))
-        }
-
         val mFragments = ArrayList<Fragment>()
-        mFragments.add(DayReportFragment(Constant.REPORT_TYPE_DAY))
-        mFragments.add(DayReportFragment(Constant.REPORT_TYPE_WEEK))
-        mFragments.add(DayReportFragment(Constant.REPORT_TYPE_MONTH))
+        var mTitles = context?.resources?.getStringArray(R.array.areas)
+        mTitles?.forEachIndexed { index, title ->
+            mTabLayout.addTab(mTabLayout.newTab().setText(title))
+            mFragments.add(ContactsTabFragment(index + 1, false))
+        }
 
         mAdapter = MyFragmentPagerAdapter(childFragmentManager)
         mAdapter.addTitlesAndFragments(mTitles, mFragments)

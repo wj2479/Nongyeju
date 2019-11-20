@@ -4,14 +4,21 @@ import android.app.Activity
 import android.content.Intent
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
+import com.lcodecore.ILabel
 import com.qdhc.ny.R
 import com.qdhc.ny.adapter.ProjectSchueduleAdapter
 import com.qdhc.ny.base.BaseActivity
+import com.qdhc.ny.bean.TagLabel
 import com.qdhc.ny.bmob.ProjSchedule
 import com.qdhc.ny.bmob.Project
 import com.qdhc.ny.bmob.UserInfo
 import com.qdhc.ny.utils.SharedPreferencesUtils
-import kotlinx.android.synthetic.main.activity_contradiction_info.*
+import kotlinx.android.synthetic.main.activity_contradiction_info.bt_comment
+import kotlinx.android.synthetic.main.activity_contradiction_info.commentButLayout
+import kotlinx.android.synthetic.main.activity_contradiction_info.descriptionTv
+import kotlinx.android.synthetic.main.activity_contradiction_info.projectTv
+import kotlinx.android.synthetic.main.activity_contradiction_info.rlv
+import kotlinx.android.synthetic.main.activity_project_info.*
 import kotlinx.android.synthetic.main.layout_title_theme.*
 
 class ProjectInfoActivity : BaseActivity() {
@@ -62,6 +69,18 @@ class ProjectInfoActivity : BaseActivity() {
 
         projectTv.text = project.name
         descriptionTv.text = project.introduce
+
+
+        if (null != project.tags) {
+            var split = project.tags.trim().split(" ")
+
+            // 标签的数据
+            var labels = ArrayList<ILabel>()
+            split.forEach { text ->
+                labels.add(TagLabel(text, text))
+            }
+            label_me.setLabels(labels)
+        }
 
         projSchedule = ProjSchedule()
         projSchedule.content = "工程创建"

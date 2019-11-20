@@ -22,14 +22,15 @@ import com.yanzhenjie.recyclerview.swipe.widget.DefaultItemDecoration
 import kotlinx.android.synthetic.main.fragment_contacts.*
 
 @SuppressLint("ValidFragment")
-class ContactsFragment(areaId: Int, isShowTitle: Boolean) : BaseFragment() {
+class ContactsFragment(areaId: Int, villageId: String, isShowTitle: Boolean) : BaseFragment() {
 
     var areaId = 0
-
+    var villageId: String
     var isShowTitle = true
 
     init {
         this.areaId = areaId
+        this.villageId = villageId
         this.isShowTitle = isShowTitle
     }
 
@@ -48,12 +49,14 @@ class ContactsFragment(areaId: Int, isShowTitle: Boolean) : BaseFragment() {
     }
 
     override fun lazyLoad() {
+
     }
 
     override fun initClick() {
         addIv.setOnClickListener { v ->
             var intent = Intent(context, UserAddActivity::class.java)
             intent.putExtra("area", areaId)
+            intent.putExtra("village", villageId)
             context?.startActivity(intent)
         }
     }
@@ -67,12 +70,9 @@ class ContactsFragment(areaId: Int, isShowTitle: Boolean) : BaseFragment() {
 
         // RecyclerView Item点击监听。
         smrw.setSwipeItemClickListener { itemView, position ->
-            //            if (datas[position].phone.length>=7){
-//                var intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + datas[position].phone))
-//                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-//                startActivity(intent)
-//            }
+            var user = datas.get(position)
 
+//            startActivity(Intent(activity, UserInfoActivity::class.java).putExtra("user", user).putExtra("type","pwd"))
         }
 
         mAdapter = ContactsAdapter(activity, datas)
@@ -97,6 +97,7 @@ class ContactsFragment(areaId: Int, isShowTitle: Boolean) : BaseFragment() {
     fun getData() {
         val categoryBmobQuery = BmobQuery<UserInfo>()
         categoryBmobQuery.addWhereEqualTo("areaId", areaId)
+        categoryBmobQuery.addWhereEqualTo("district", villageId)
         categoryBmobQuery.addWhereEqualTo("role", 1)
         categoryBmobQuery.findObjects(
                 object : FindListener<UserInfo>() {

@@ -7,12 +7,16 @@ import com.google.gson.Gson
 import com.qdhc.ny.adapter.TabFragmentPagerAdapter
 import com.qdhc.ny.base.BaseActivity
 import com.qdhc.ny.bean.TabIconBean
-import com.qdhc.ny.fragment.ContactsTabFragment
+import com.qdhc.ny.fragment.ContactsTwoTabsFragment
 import com.qdhc.ny.fragment.MyFragment
-import com.qdhc.ny.fragment.ProjectTabFragment
+import com.qdhc.ny.fragment.ProjectTwoTabsFragment
+import com.qdhc.ny.fragment.ReportTwoTabsFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
+/**
+ * 市领导
+ */
 class Main3Activity : BaseActivity() {
 
     var gson = Gson()
@@ -28,10 +32,12 @@ class Main3Activity : BaseActivity() {
 
     //UI
     private val mTabEntities = ArrayList<CustomTabEntity>()
-    private val mIconUnselectIds = intArrayOf(R.drawable.ic_list,
+    private val mIconUnselectIds = intArrayOf(R.drawable.ic_schedule,
+            R.drawable.ic_quality,
             R.drawable.ic_contacts,
             R.drawable.ic_my)
-    private val mIconSelectIds = intArrayOf(R.drawable.ic_list_select,
+    private val mIconSelectIds = intArrayOf(R.drawable.ic_schedule_select,
+            R.drawable.ic_quality_select,
             R.drawable.ic_contacts_select,
             R.drawable.ic_my_select)
 
@@ -40,8 +46,9 @@ class Main3Activity : BaseActivity() {
         var tabTitle = resources.getStringArray(R.array.tab2_titles)
         //将fragment装进列表中
         var fragmentList = ArrayList<Fragment>()
-        fragmentList.add(ProjectTabFragment())
-        fragmentList.add(ContactsTabFragment())
+        fragmentList.add(ProjectTwoTabsFragment())
+        fragmentList.add(ReportTwoTabsFragment())
+        fragmentList.add(ContactsTwoTabsFragment())
         fragmentList.add(MyFragment())
         //viewpager加载adapter
         vp.adapter = TabFragmentPagerAdapter(supportFragmentManager, fragmentList, tabTitle)

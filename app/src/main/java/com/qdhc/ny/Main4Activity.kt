@@ -7,24 +7,20 @@ import com.google.gson.Gson
 import com.qdhc.ny.adapter.TabFragmentPagerAdapter
 import com.qdhc.ny.base.BaseActivity
 import com.qdhc.ny.bean.TabIconBean
-import com.qdhc.ny.bmob.UserInfo
-import com.qdhc.ny.fragment.ContactsTabFragment
+import com.qdhc.ny.fragment.ContactsFragment
+import com.qdhc.ny.fragment.ContradictionListFragment
 import com.qdhc.ny.fragment.MyFragment
-import com.qdhc.ny.fragment.ProjectTabFragment
-import com.qdhc.ny.fragment.ReportTabFragment
+import com.qdhc.ny.fragment.ReportListFragment
 import com.qdhc.ny.utils.SharedPreferencesUtils
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
 /**
- * 区县领导
+ * 乡镇领导
  */
-class Main2Activity : BaseActivity() {
+class Main4Activity : BaseActivity() {
 
     var gson = Gson()
-
-    lateinit var userInfo: UserInfo
-
     override fun intiLayout(): Int {
         return (R.layout.activity_main2)
     }
@@ -47,15 +43,16 @@ class Main2Activity : BaseActivity() {
             R.drawable.ic_my_select)
 
     override fun initView() {
-        userInfo = SharedPreferencesUtils.loadLogin(this)
+
+        var userInfo = SharedPreferencesUtils.loadLogin(this)
 
         //获取数据 在values/arrays.xml中进行定义然后调用
         var tabTitle = resources.getStringArray(R.array.tab2_titles)
         //将fragment装进列表中
         var fragmentList = ArrayList<Fragment>()
-        fragmentList.add(ProjectTabFragment(userInfo.areaId, true))
-        fragmentList.add(ReportTabFragment(userInfo.areaId, true))
-        fragmentList.add(ContactsTabFragment(userInfo.areaId, true))
+        fragmentList.add(ContradictionListFragment(userInfo.areaId, userInfo.district, true))
+        fragmentList.add(ReportListFragment(userInfo.areaId, userInfo.district, true))
+        fragmentList.add(ContactsFragment(userInfo.areaId, userInfo.district, true))
         fragmentList.add(MyFragment())
         //viewpager加载adapter
         vp.adapter = TabFragmentPagerAdapter(supportFragmentManager, fragmentList, tabTitle)

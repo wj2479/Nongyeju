@@ -16,6 +16,8 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
     private String[] titles;
     private List<Fragment> fragments;
 
+    private int mChildCount = 0;
+
     public MyFragmentPagerAdapter(FragmentManager fm) {
         super(fm);
     }
@@ -40,4 +42,11 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
         this.titles = titles;
         this.fragments = fragments;
     }
+
+    @Override
+    public void notifyDataSetChanged() {
+        mChildCount = getCount();
+        super.notifyDataSetChanged();
+    }
+
 }

@@ -3,22 +3,22 @@ package com.qdhc.ny.fragment
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.support.v4.app.Fragment
+import android.view.View
 import com.baoyz.actionsheet.ActionSheet
 import com.qdhc.ny.activity.AddReportActivity
 import com.qdhc.ny.adapter.MyFragmentPagerAdapter
 import com.qdhc.ny.base.BaseFragment
-import com.qdhc.ny.common.Constant
-import kotlinx.android.synthetic.main.fragment_report.*
+import com.qdhc.ny.common.ProjectData
+import kotlinx.android.synthetic.main.fragment_project_tab.*
 
 
 @SuppressLint("ValidFragment")
-class ReportFragment : BaseFragment(), ActionSheet.ActionSheetListener {
+class ReportTabFragment(areaId: Int, isShowTitle: Boolean) : BaseFragment(), ActionSheet.ActionSheetListener {
 
     lateinit var mAdapter: MyFragmentPagerAdapter
 
-    var areaId = 0
-
     var isShowTitle = true
+    var areaId = 0
 
     init {
         this.areaId = areaId
@@ -26,10 +26,12 @@ class ReportFragment : BaseFragment(), ActionSheet.ActionSheetListener {
     }
 
     override fun intiLayout(): Int {
-        return com.qdhc.ny.R.layout.fragment_report
+        return com.qdhc.ny.R.layout.fragment_report_tab
     }
 
     override fun initView() {
+        if (!isShowTitle)
+            titleLayout.visibility = View.GONE
         setupWithViewPager()
     }
 
@@ -37,15 +39,19 @@ class ReportFragment : BaseFragment(), ActionSheet.ActionSheetListener {
      * Description：初始化FragmentPagerAdapter适配器并给ViewPager设置上该适配器，最后关联TabLayout和ViewPager
      */
     private fun setupWithViewPager() {
-        var mTitles = context?.resources?.getStringArray(com.qdhc.ny.R.array.report_titles)!!
-        mTitles.forEach { title ->
-            mTabLayout.addTab(mTabLayout.newTab().setText(title))
-        }
-
         val mFragments = ArrayList<Fragment>()
-        mFragments.add(DayReportFragment(Constant.REPORT_TYPE_DAY))
-        mFragments.add(DayReportFragment(Constant.REPORT_TYPE_WEEK))
-        mFragments.add(DayReportFragment(Constant.REPORT_TYPE_MONTH))
+
+        var mTitleList = ArrayList<String>()
+        ProjectData.getInstance().villages.forEach { village ->
+            if (village.areaId == areaId) {
+                mTabLayout.addTab(mTabLayout.newTab().setText(village.name))
+                mFragments.add(ReportListFragment(areaId, village.objectId, false))
+                mTitleList.add(village.name)
+            }
+        }
+        var mTitles = arrayOfNulls<String>(mTitleList.size)
+        mTitleList.toArray(mTitles)
+
 
         mAdapter = MyFragmentPagerAdapter(childFragmentManager)
         mAdapter.addTitlesAndFragments(mTitles, mFragments)

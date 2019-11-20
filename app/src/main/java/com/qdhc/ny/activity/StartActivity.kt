@@ -13,6 +13,8 @@ import com.google.gson.Gson
 import com.qdhc.ny.*
 import com.qdhc.ny.base.BaseActivity
 import com.qdhc.ny.bmob.UserInfo
+import com.qdhc.ny.bmob.Villages
+import com.qdhc.ny.common.ProjectData
 import com.qdhc.ny.utils.SharedPreferencesUtils
 import com.sj.core.utils.SharedPreferencesUtil
 import com.tencent.bugly.crashreport.CrashReport
@@ -24,7 +26,7 @@ class StartActivity : BaseActivity() {
     }
 
     override fun initView() {
-
+        getHasVillages()
     }
 
     private fun init() {
@@ -53,8 +55,9 @@ class StartActivity : BaseActivity() {
 
                         when (user.role) {
                             1 -> startActivity(Intent(mContext, MainActivity::class.java))
-                            2 -> startActivity(Intent(mContext, Main2Activity::class.java))
-                            3 -> startActivity(Intent(mContext, Main3Activity::class.java))
+                            2 -> startActivity(Intent(mContext, Main4Activity::class.java))
+                            3 -> startActivity(Intent(mContext, Main2Activity::class.java))
+                            4 -> startActivity(Intent(mContext, Main4Activity::class.java))
                         }
                     } else {
                         startActivity(Intent(mContext, LoginActivity::class.java))
@@ -63,6 +66,24 @@ class StartActivity : BaseActivity() {
                     startActivity(Intent(mContext, LoginActivity::class.java))
                 }
                 finish()
+            }
+        })
+    }
+
+    /**
+     * 获取村落列表
+     */
+    fun getHasVillages() {
+        val categoryBmobQuery = BmobQuery<Villages>()
+        categoryBmobQuery.findObjects(object : FindListener<Villages>() {
+            override fun done(list: List<Villages>, e: BmobException?) {
+                if (e == null) {
+                    Log.e("村落列表结果-----》", list.toString())
+                    ProjectData.getInstance().villages = list
+                    list.forEach { village -> ProjectData.getInstance().villageMap.put(village.objectId, village) }
+                } else {
+                    Log.e("异常-----》", e.toString())
+                }
             }
         })
     }
@@ -94,6 +115,7 @@ class StartActivity : BaseActivity() {
             1 -> startActivity(Intent(mContext, MainActivity::class.java))
             2 -> startActivity(Intent(mContext, Main2Activity::class.java))
             3 -> startActivity(Intent(mContext, Main3Activity::class.java))
+            4 -> startActivity(Intent(mContext, Main4Activity::class.java))
         }
     }
 

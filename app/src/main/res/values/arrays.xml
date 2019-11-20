@@ -11,6 +11,7 @@
 
     <string-array name="tab2_titles">
         <item>工程</item>
+        <item>质量</item>
         <item>人员</item>
         <item>我</item>
     </string-array>
@@ -59,8 +60,9 @@
     <!--管辖区域-->
     <string-array name="areas">
         <item>东港区</item>
-        <item>莒  县</item>
-        <item>五  莲</item>
+        <item>莒县</item>
+        <item>五莲县</item>
+        <item>岚山区</item>
     </string-array>
 
     <!--用户角色-->

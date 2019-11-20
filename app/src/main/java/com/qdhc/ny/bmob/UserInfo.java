@@ -35,12 +35,12 @@ public class UserInfo extends BmobUser implements Serializable {
     private int role;
 
     /**
-     *
+     * 所属乡镇
      */
     private String district;
 
     /**
-     * 管辖区域ID
+     * 管辖区县ID
      */
     private int areaId;
 

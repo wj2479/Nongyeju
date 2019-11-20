@@ -9,8 +9,8 @@ android {
         applicationId "com.qdhc.ny"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 6
-        versionName "1.0.6"
+        versionCode 7
+        versionName "1.0.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
@@ -102,6 +102,8 @@ dependencies {
     implementation 'com.baoyz.actionsheet:library:1.1.7'
     // eventbus
     implementation 'org.greenrobot:eventbus:3.1.1'
+    // 标签控件
+    implementation 'com.lcodecorex:labellayout:1.0.1'
     implementation project(path: ':zloadingview')
 }
 

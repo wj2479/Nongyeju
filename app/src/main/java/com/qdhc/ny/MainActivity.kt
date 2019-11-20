@@ -22,6 +22,7 @@ import android.view.KeyEvent
 import cn.bmob.v3.BmobQuery
 import cn.bmob.v3.exception.BmobException
 import cn.bmob.v3.listener.FindListener
+import cn.bmob.v3.listener.SaveListener
 import com.amap.api.location.*
 import com.amap.api.maps.AMapUtils
 import com.amap.api.maps.model.LatLng
@@ -38,10 +39,10 @@ import com.qdhc.ny.bmob.*
 import com.qdhc.ny.common.Constant
 import com.qdhc.ny.common.ProjectData
 import com.qdhc.ny.eventbus.ProjectEvent
+import com.qdhc.ny.fragment.ContradictionListFragment
 import com.qdhc.ny.fragment.IndexFragment
 import com.qdhc.ny.fragment.MyFragment
-import com.qdhc.ny.fragment.ProjectListFragment
-import com.qdhc.ny.fragment.ReportFragment
+import com.qdhc.ny.fragment.ReportListFragment
 import com.qdhc.ny.utils.SharedPreferencesUtils
 import com.sj.core.utils.SharedPreferencesUtil
 import com.sj.core.utils.ToastUtil
@@ -70,11 +71,11 @@ class MainActivity : BaseActivity() {
     }
 
     override fun initData() {
-        userInfo = SharedPreferencesUtils.loadLogin(this)
 
         if (Build.VERSION.SDK_INT >= 23) {
             requestPermissions()
         }
+
     }
 
     private fun requestPermissions() {
@@ -122,14 +123,16 @@ class MainActivity : BaseActivity() {
     var projectList = ArrayList<Project>()
 
     override fun initView() {
+        userInfo = SharedPreferencesUtils.loadLogin(this)
+
         //获取数据 在values/arrays.xml中进行定义然后调用
         var tabTitle = resources.getStringArray(R.array.tab_titles)
         //将fragment装进列表中
         var fragmentList = ArrayList<Fragment>()
         fragmentList.add(IndexFragment())
-        fragmentList.add(ProjectListFragment())
+        fragmentList.add(ContradictionListFragment(userInfo.areaId, userInfo.district, true))
         fragmentList.add(MyFragment())
-        fragmentList.add(ReportFragment())
+        fragmentList.add(ReportListFragment(userInfo.areaId, userInfo.district, true))
         fragmentList.add(MyFragment())
         //viewpager加载adapter
         vp.adapter = TabFragmentPagerAdapter(supportFragmentManager, fragmentList, tabTitle)
@@ -241,11 +244,7 @@ class MainActivity : BaseActivity() {
     //获取数据
     fun getProjectData() {
         val categoryBmobQuery = BmobQuery<Project>()
-        if (userInfo.role == 1) {    // 1级用户 智能查看自己的数据
-            categoryBmobQuery.addWhereEqualTo("manager", userInfo.objectId)
-        } else if (userInfo.role == 2) {  // 2级用户 只能查看本区县的信息
-            categoryBmobQuery.addWhereEqualTo("area", userInfo.district)
-        }
+        categoryBmobQuery.addWhereEqualTo("manager", userInfo.objectId)
         categoryBmobQuery.order("-createdAt")
         categoryBmobQuery.findObjects(
                 object : FindListener<Project>() {
@@ -451,16 +450,16 @@ class MainActivity : BaseActivity() {
                 }
                 tracks.remark = sb_temp.toString()     // 备注信息
 
-//                tracks.save(object : SaveListener<String>() {
-//                    override fun done(objectId: String?, e: BmobException?) {
-//                        if (e == null) {
-//                            lastUploadLocation = location
-//                            Log.e("AMAP", "轨迹上传成功")
-//                        } else {
-//                            Log.e("AMAP", "轨迹上传失败:" + e.toString())
-//                        }
-//                    }
-//                })
+                tracks.save(object : SaveListener<String>() {
+                    override fun done(objectId: String?, e: BmobException?) {
+                        if (e == null) {
+                            lastUploadLocation = location
+                            Log.e("AMAP", "轨迹上传成功")
+                        } else {
+                            Log.e("AMAP", "轨迹上传失败:" + e.toString())
+                        }
+                    }
+                })
                 ProjectData.getInstance().location = location
             }
         }

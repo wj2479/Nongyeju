@@ -47,8 +47,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
-                    android:text="未处理"
-                    android:visibility="invisible" />
+                    android:text="" />
 
             </LinearLayout>
 
@@ -111,7 +110,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/dp_8"
-
                     android:text=""
                     android:textColor="@color/hui"
                     android:textSize="@dimen/textsize_7" />
@@ -128,64 +126,6 @@
                     android:textSize="@dimen/textsize_7" />
 
             </LinearLayout>
-
-            <View style="@style/line_vertical"></View>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_4"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:id="@+id/tv_dayReport"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:padding="@dimen/dp_8"
-                    android:text="日  报"
-                    android:textColor="@color/themecolor"
-                    android:textSize="@dimen/textsize_8" />
-
-                <View
-                    android:layout_width="0.8dp"
-                    android:layout_height="24dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:background="@color/_8c"></View>
-
-                <TextView
-                    android:id="@+id/tv_weekReport"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:padding="@dimen/dp_8"
-                    android:text="周  报"
-                    android:textColor="@color/themecolor"
-                    android:textSize="@dimen/textsize_8" />
-
-                <View
-                    android:layout_width="0.8dp"
-                    android:layout_height="24dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:background="@color/_8c"></View>
-
-                <TextView
-                    android:id="@+id/tv_monthReport"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:padding="@dimen/dp_8"
-                    android:text="月  报"
-                    android:textColor="@color/themecolor"
-                    android:textSize="@dimen/textsize_8" />
-
-            </LinearLayout>
-
 
         </LinearLayout>
     </android.support.v7.widget.CardView>

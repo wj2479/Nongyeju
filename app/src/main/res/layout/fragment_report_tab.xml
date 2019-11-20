@@ -15,13 +15,14 @@
             android:layout_height="match_parent"
             android:background="@color/white"
             android:gravity="center"
-            android:text="工作"
+            android:text="工程质量"
             android:textSize="@dimen/textsize_9" />
 
         <View
             style="@style/line_vertical"
             android:layout_alignParentBottom="true"></View>
     </RelativeLayout>
+
 
     <!--tabIndicatorColor：指示器的颜色-->
     <!--tabIndicatorHeight：指示器的高度，可设置为0，相当于没有指示器-->

@@ -2,7 +2,6 @@ package com.qdhc.ny.fragment
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Bundle
 import android.view.View
 import cn.bmob.v3.BmobUser
 import com.qdhc.ny.LoginActivity
@@ -13,26 +12,14 @@ import com.qdhc.ny.activity.UserInfoActivity
 import com.qdhc.ny.activity.UserManagerActivity
 import com.qdhc.ny.base.BaseFragment
 import com.qdhc.ny.bmob.UserInfo
+import com.qdhc.ny.common.ProjectData
 import com.qdhc.ny.utils.BaseUtil
 import com.qdhc.ny.utils.SharedPreferencesUtils
 import com.sj.core.utils.AcitityManagerUtil
+import com.sj.core.utils.ImageLoaderUtil
 import kotlinx.android.synthetic.main.fragment_my.*
 
 class MyFragment : BaseFragment() {
-
-    companion object {
-        private val ARG_PARAM1 = "param1"
-        private val ARG_PARAM2 = "param2"
-
-        fun newInstance(param1: String, param2: String): MyFragment {
-            val fragment = MyFragment()
-            val args = Bundle()
-            args.putString(ARG_PARAM1, param1)
-            args.putString(ARG_PARAM2, param2)
-            fragment.arguments = args
-            return fragment
-        }
-    }
 
     override fun intiLayout(): Int {
         return R.layout.fragment_my
@@ -47,6 +34,11 @@ class MyFragment : BaseFragment() {
         if (userInfo.role == 0) {
             ll_usermanager.visibility = View.VISIBLE
         }
+
+        if (userInfo.avatar != null) {
+            ImageLoaderUtil.loadCorners(context, userInfo.avatar.url, iv_photo, -1, R.drawable.ic_defult_user)
+        }
+
     }
 
     override fun initClick() {
@@ -58,7 +50,7 @@ class MyFragment : BaseFragment() {
         ll_user.setOnClickListener {
             //更新个人信息
             startActivityForResult(Intent(activity, UserInfoActivity::class.java)
-                    .putExtra("user", userInfo), 1)
+                    .putExtra("user", userInfo), 100)
         }
         ll_feedback.setOnClickListener {
             //意见反馈
@@ -76,14 +68,25 @@ class MyFragment : BaseFragment() {
     }
 
     override fun initData() {
-
         var array = activity?.resources?.getStringArray(R.array.areas)
+
+        var area = ""
+        if (userInfo.areaId > 0 && userInfo.areaId <= 4) {
+            area = array?.get(userInfo.areaId - 1).toString()
+        }
 
         when (userInfo.role) {
             0 -> tv_job.text = "管理员"
-            1 -> tv_job.text = "负责区域:" + array?.get(userInfo.areaId - 1)
-            2 -> tv_job.text = "区县领导"
+            1 -> {
+                var village = ProjectData.getInstance().villageMap.get(userInfo.district)
+                tv_job.text = area + village?.name + "监理"
+            }
+            2 -> tv_job.text = area + "领导"
             3 -> tv_job.text = "市领导"
+            4 -> {
+                var village = ProjectData.getInstance().villageMap.get(userInfo.district)
+                tv_job.text = area + village?.name + "领导"
+            }
         }
     }
 
@@ -100,13 +103,11 @@ class MyFragment : BaseFragment() {
         SharedPreferencesUtils.removeLogin(context)
     }
 
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
-//            getDatas()
+        if (requestCode == 100 && resultCode == Activity.RESULT_OK) {
+            initView()
         }
     }
-
 
 }

@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <include layout="@layout/layout_title_theme"></include>
@@ -33,7 +33,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="工程: "
+                        android:text="工程名称: "
                         android:textSize="@dimen/textsize_8"
                         android:textStyle="bold" />
 
@@ -41,6 +41,49 @@
                         android:id="@+id/projectTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/dp_8"
+                    android:paddingRight="@dimen/dp_8">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_8">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="工程标签"
+                            android:textSize="@dimen/sp_16"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tv_add"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/dp_8"
+                            android:text="添加自定义标签"
+                            android:textSize="@dimen/sp_16"
+                            android:padding="@dimen/dp_4"
+                            android:visibility="invisible" />
+                    </LinearLayout>
+
+                    <com.lcodecore.LabelLayout
+                        android:id="@+id/label_me"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:label_checkboxLayout="@layout/checkbox_label_single"
+                        android:layout_margin="16dp" />
+
                 </LinearLayout>
 
                 <LinearLayout

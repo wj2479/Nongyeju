@@ -1,23 +1,34 @@
 package com.qdhc.ny.fragment
 
-import android.content.Intent
+import android.annotation.SuppressLint
 import android.support.v4.app.Fragment
-import com.baoyz.actionsheet.ActionSheet
-import com.qdhc.ny.activity.AddReportActivity
+import android.util.Log
+import android.view.View
 import com.qdhc.ny.adapter.MyFragmentPagerAdapter
 import com.qdhc.ny.base.BaseFragment
+import com.qdhc.ny.common.ProjectData
 import kotlinx.android.synthetic.main.fragment_project_tab.*
 
-
-class ProjectTabFragment : BaseFragment(), ActionSheet.ActionSheetListener {
+@SuppressLint("ValidFragment")
+class ProjectTabFragment(areaId: Int, isShowTitle: Boolean) : BaseFragment() {
 
     lateinit var mAdapter: MyFragmentPagerAdapter
+
+    var isShowTitle = true
+    var areaId = 0
+
+    init {
+        this.areaId = areaId
+        this.isShowTitle = isShowTitle
+    }
 
     override fun intiLayout(): Int {
         return com.qdhc.ny.R.layout.fragment_project_tab
     }
 
     override fun initView() {
+        if (!isShowTitle)
+            titleLayout.visibility = View.GONE
         setupWithViewPager()
     }
 
@@ -25,15 +36,20 @@ class ProjectTabFragment : BaseFragment(), ActionSheet.ActionSheetListener {
      * Description：初始化FragmentPagerAdapter适配器并给ViewPager设置上该适配器，最后关联TabLayout和ViewPager
      */
     private fun setupWithViewPager() {
-        var mTitles = arrayOf("东港区", "莒县", "五莲")
-        mTitles.forEach { title ->
-            mTabLayout.addTab(mTabLayout.newTab().setText(title))
-        }
-
         val mFragments = ArrayList<Fragment>()
-        mFragments.add(ContradictionListFragment(1, false))
-        mFragments.add(ContradictionListFragment(2, false))
-        mFragments.add(ContradictionListFragment(3, false))
+
+        var mTitleList = ArrayList<String>()
+        ProjectData.getInstance().villages.forEach { village ->
+            if (village.areaId == areaId) {
+                mTabLayout.addTab(mTabLayout.newTab().setText(village.name))
+                mFragments.add(ContradictionListFragment(areaId, village.objectId, false))
+                mTitleList.add(village.name)
+            }
+        }
+        var mTitles = arrayOfNulls<String>(mTitleList.size)
+        mTitleList.toArray(mTitles)
+
+        Log.e("TAG", "Titles->" + mTitles.size)
 
         mAdapter = MyFragmentPagerAdapter(childFragmentManager)
         mAdapter.addTitlesAndFragments(mTitles, mFragments)
@@ -58,15 +74,6 @@ class ProjectTabFragment : BaseFragment(), ActionSheet.ActionSheetListener {
 //                    .setCancelableOnTouchOutside(true)
 //                    .setListener(this).show();
 //        }
-    }
-
-    override fun onOtherButtonClick(actionSheet: ActionSheet?, index: Int) {
-        var intent = Intent(context, AddReportActivity::class.java)
-        intent.putExtra("type", index + 1)
-        startActivity(intent)
-    }
-
-    override fun onDismiss(actionSheet: ActionSheet?, isCancel: Boolean) {
     }
 
     //获取数据

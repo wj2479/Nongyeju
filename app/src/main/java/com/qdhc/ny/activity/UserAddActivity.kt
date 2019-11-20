@@ -61,6 +61,7 @@ class UserAddActivity : BaseActivity() {
             user.nickName = nickName
             user.mobilePhoneNumber = phone
             user.areaId = intent.getIntExtra("area", 0)
+            user.district = intent.getStringExtra("village")
             user.role = 1
             user.signUp(object : SaveListener<UserInfo>() {
                 override fun done(user: UserInfo?, e: BmobException?) {
