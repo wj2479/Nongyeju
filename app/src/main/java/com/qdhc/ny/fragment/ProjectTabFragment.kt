@@ -1,6 +1,7 @@
 package com.qdhc.ny.fragment
 
 import android.annotation.SuppressLint
+import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.View
@@ -57,6 +58,7 @@ class ProjectTabFragment(areaId: Int, isShowTitle: Boolean) : BaseFragment() {
         mViewPager.setOffscreenPageLimit(mFragments.size)
         mViewPager.setAdapter(mAdapter) // 给ViewPager设置适配器
         mTabLayout.setupWithViewPager(mViewPager) //关联TabLayout和ViewPager
+        mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
     }
 
     override fun initData() {

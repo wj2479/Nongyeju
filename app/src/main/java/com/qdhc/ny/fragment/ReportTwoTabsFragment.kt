@@ -1,17 +1,14 @@
 package com.qdhc.ny.fragment
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.support.v4.app.Fragment
-import com.baoyz.actionsheet.ActionSheet
-import com.qdhc.ny.activity.AddReportActivity
 import com.qdhc.ny.adapter.MyFragmentPagerAdapter
 import com.qdhc.ny.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_project_tab.*
 
 
 @SuppressLint("ValidFragment")
-class ReportTwoTabsFragment() : BaseFragment(), ActionSheet.ActionSheetListener {
+class ReportTwoTabsFragment() : BaseFragment() {
 
     lateinit var mAdapter: MyFragmentPagerAdapter
 
@@ -59,15 +56,6 @@ class ReportTwoTabsFragment() : BaseFragment(), ActionSheet.ActionSheetListener 
 //                    .setCancelableOnTouchOutside(true)
 //                    .setListener(this).show();
 //        }
-    }
-
-    override fun onOtherButtonClick(actionSheet: ActionSheet?, index: Int) {
-        var intent = Intent(context, AddReportActivity::class.java)
-        intent.putExtra("type", index + 1)
-        startActivity(intent)
-    }
-
-    override fun onDismiss(actionSheet: ActionSheet?, isCancel: Boolean) {
     }
 
     //获取数据

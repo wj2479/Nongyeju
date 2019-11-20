@@ -1,11 +1,9 @@
 package com.qdhc.ny.fragment
 
 import android.annotation.SuppressLint
-import android.content.Intent
+import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.view.View
-import com.baoyz.actionsheet.ActionSheet
-import com.qdhc.ny.activity.AddReportActivity
 import com.qdhc.ny.adapter.MyFragmentPagerAdapter
 import com.qdhc.ny.base.BaseFragment
 import com.qdhc.ny.common.ProjectData
@@ -14,7 +12,7 @@ import kotlinx.android.synthetic.main.fragment_contacts_tab.mViewPager
 import kotlinx.android.synthetic.main.fragment_project_tab.*
 
 @SuppressLint("ValidFragment")
-class ContactsTabFragment(areaId: Int, isShowTitle: Boolean) : BaseFragment(), ActionSheet.ActionSheetListener {
+class ContactsTabFragment(areaId: Int, isShowTitle: Boolean) : BaseFragment() {
 
     lateinit var mAdapter: MyFragmentPagerAdapter
 
@@ -58,6 +56,7 @@ class ContactsTabFragment(areaId: Int, isShowTitle: Boolean) : BaseFragment(), A
         mViewPager.setOffscreenPageLimit(mFragments.size)
         mViewPager.setAdapter(mAdapter) // 给ViewPager设置适配器
         mTabLayout.setupWithViewPager(mViewPager) //关联TabLayout和ViewPager
+        mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
     }
 
     override fun initData() {
@@ -75,15 +74,6 @@ class ContactsTabFragment(areaId: Int, isShowTitle: Boolean) : BaseFragment(), A
 //                    .setCancelableOnTouchOutside(true)
 //                    .setListener(this).show();
 //        }
-    }
-
-    override fun onOtherButtonClick(actionSheet: ActionSheet?, index: Int) {
-        var intent = Intent(context, AddReportActivity::class.java)
-        intent.putExtra("type", index + 1)
-        startActivity(intent)
-    }
-
-    override fun onDismiss(actionSheet: ActionSheet?, isCancel: Boolean) {
     }
 
     //获取数据

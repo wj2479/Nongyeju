@@ -68,13 +68,6 @@ class ContactsFragment(areaId: Int, villageId: String, isShowTitle: Boolean) : B
         smrw!!.layoutManager = LinearLayoutManager(activity)
         smrw!!.addItemDecoration(DefaultItemDecoration(ContextCompat.getColor(activity!!, R.color.line_wag)))
 
-        // RecyclerView Item点击监听。
-        smrw.setSwipeItemClickListener { itemView, position ->
-            var user = datas.get(position)
-
-//            startActivity(Intent(activity, UserInfoActivity::class.java).putExtra("user", user).putExtra("type","pwd"))
-        }
-
         mAdapter = ContactsAdapter(activity, datas)
         smrw.adapter = mAdapter
 

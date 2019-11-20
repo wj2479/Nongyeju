@@ -22,7 +22,7 @@
         <item name="android:textColorHint">@color/hui</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">@dimen/textsize_7</item>
-        <item name="actionSheetStyle">@style/ActionSheetStyleiOS7</item>
+
     </style>
     <!--横线 白色跟白之间-->
     <style name="line_vertical">
@@ -89,22 +89,6 @@
         <item name="android:textSize">16sp</item>
     </style>
 
-    <!-- iOS7 Style -->
-    <style name="ActionSheetStyleiOS7">
-        <item name="actionSheetBackground">@android:color/transparent</item>
-        <item name="cancelButtonBackground">@drawable/slt_as_ios7_cancel_bt</item>
-        <item name="otherButtonTopBackground">@drawable/slt_as_ios7_other_bt_top</item>
-        <item name="otherButtonMiddleBackground">@drawable/slt_as_ios7_other_bt_middle</item>
-        <item name="otherButtonBottomBackground">@drawable/slt_as_ios7_other_bt_bottom</item>
-        <item name="otherButtonSingleBackground">@drawable/slt_as_ios7_other_bt_single</item>
-        <item name="cancelButtonTextColor">@color/themecolor</item>
-        <item name="otherButtonTextColor">@color/themecolor</item>
-        <item name="actionSheetPadding">10dp</item>
-        <item name="otherButtonSpacing">0dp</item>
-        <item name="cancelButtonMarginTop">10dp</item>
-        <item name="actionSheetTextSize">16sp</item>
-    </style>
-
     <!--默认样式 注意* 样式只可修改，不能删除任何一项 否则报错-->
     <style name="picture.default.style" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
@@ -149,7 +133,7 @@
         <!--预览界面返回箭头-->
         <item name="picture.preview.leftBack.icon">@drawable/picture_back</item>
         <!--是否改变预览界面状态栏字体颜色为黑色-->
-<!--        <item name="picture.preview.statusFontColor">false</item>-->
+        <!--        <item name="picture.preview.statusFontColor">false</item>-->
         <!--裁剪页面标题背景色-->
         <item name="picture.crop.toolbar.bg">@color/bar_grey</item>
         <!--裁剪页面状态栏颜色-->
