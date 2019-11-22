@@ -102,14 +102,6 @@ public class UserInfo extends BmobUser implements Serializable {
 
     @Override
     public String toString() {
-        return "UserInfo{" +
-                "nickName='" + nickName + '\'' +
-                ", age=" + age +
-                ", gender=" + gender +
-                ", avatar=" + avatar +
-                ", role=" + role +
-                ", district='" + district + '\'' +
-                ", areaId=" + areaId +
-                '}';
+        return nickName;
     }
 }

@@ -110,7 +110,7 @@ class AddProjectActivity : BaseActivity() {
             project.introduce = content
             project.area = areaId
             project.village = villageId
-            project.tags = sb.toString()
+            project.tags = sb.toString().trim()
             project.manager = managerTv.tag.toString()
 
             project.save(object : SaveListener<String>() {

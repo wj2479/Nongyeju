@@ -40,14 +40,18 @@ public class ProjectData {
     private List<UserInfo> userInfos = new ArrayList<>();
 
     /**
-     * 所有村落的列表
+     * 所有乡镇的列表
      */
     private List<Villages> villages = new ArrayList<>();
 
     /**
-     * 所有村落的对照
+     * 乡镇ID 与乡镇对应表
      */
     private Map<String, Villages> villageMap = new HashMap<>();
+    /**
+     * 所有乡镇与用户的对应
+     */
+    private Map<String, List<UserInfo>> villageUserMap = new HashMap<>();
 
     private static ProjectData mPorjectData = null;
 
@@ -110,5 +114,13 @@ public class ProjectData {
 
     public void setVillageMap(Map<String, Villages> villageMap) {
         this.villageMap = villageMap;
+    }
+
+    public Map<String, List<UserInfo>> getVillageUserMap() {
+        return villageUserMap;
+    }
+
+    public void setVillageUserMap(Map<String, List<UserInfo>> villageUserMap) {
+        this.villageUserMap = villageUserMap;
     }
 }

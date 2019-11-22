@@ -1,6 +1,7 @@
 package com.qdhc.ny
 
 import android.support.v4.app.Fragment
+import android.widget.Toast
 import com.flyco.tablayout.listener.CustomTabEntity
 import com.flyco.tablayout.listener.OnTabSelectListener
 import com.google.gson.Gson
@@ -85,4 +86,14 @@ class Main3Activity : BaseActivity() {
         vp.setNoScroll(true)
     }
 
+    private var clickTime: Long = 0 // 第一次点击的时间
+
+    override fun onBackPressed() {
+        if (System.currentTimeMillis() - clickTime > 2000) {
+            Toast.makeText(this, "再按一次键退出", Toast.LENGTH_SHORT).show()
+            clickTime = System.currentTimeMillis()
+        } else {
+            finish()
+        }
+    }
 }

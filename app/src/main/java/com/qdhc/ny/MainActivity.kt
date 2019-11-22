@@ -22,6 +22,7 @@ import android.view.KeyEvent
 import cn.bmob.v3.BmobQuery
 import cn.bmob.v3.exception.BmobException
 import cn.bmob.v3.listener.FindListener
+import cn.bmob.v3.listener.QueryListener
 import cn.bmob.v3.listener.SaveListener
 import com.amap.api.location.*
 import com.amap.api.maps.AMapUtils
@@ -30,6 +31,7 @@ import com.flyco.tablayout.listener.CustomTabEntity
 import com.flyco.tablayout.listener.OnTabSelectListener
 import com.google.gson.Gson
 import com.luck.picture.lib.permissions.RxPermissions
+import com.qdhc.ny.activity.NotifyDetailActivity
 import com.qdhc.ny.activity.SignInActivity
 import com.qdhc.ny.adapter.TabFragmentPagerAdapter
 import com.qdhc.ny.base.BaseActivity
@@ -72,6 +74,7 @@ class MainActivity : BaseActivity() {
 
     override fun initData() {
 
+        getNotifyData()
         if (Build.VERSION.SDK_INT >= 23) {
             requestPermissions()
         }
@@ -171,6 +174,69 @@ class MainActivity : BaseActivity() {
         rxDialogSureCancel.show()
     }
 
+    /**
+     * 获取通知数据
+     */
+    fun getNotifyData() {
+        val categoryBmobQuery = BmobQuery<NotifyReceiver>()
+        categoryBmobQuery.addWhereEqualTo("uid", userInfo.objectId)
+        categoryBmobQuery.addWhereEqualTo("isRead", false)
+        categoryBmobQuery.order("-createdAt")
+        categoryBmobQuery.setLimit(1)
+        categoryBmobQuery.findObjects(
+                object : FindListener<NotifyReceiver>() {
+                    override fun done(list: List<NotifyReceiver>, e: BmobException?) {
+                        if (e == null) {
+                            if (list.size > 0) {
+                                var notifyReceiver = list[0]
+                                val categoryBmobQuery = BmobQuery<Notify>()
+                                categoryBmobQuery.getObject(notifyReceiver.nid, object : QueryListener<Notify>() {
+                                    override fun done(notify: Notify, e: BmobException?) {
+
+
+                                        initDialog(notify, notifyReceiver)
+                                    }
+                                })
+                            }
+                        } else {
+                            Log.e("异常-----》", e.toString())
+                        }
+                    }
+                })
+    }
+
+    private fun initDialog(notify: Notify, notifyReceiver: NotifyReceiver) {
+        var sb = StringBuffer()
+        sb.append("<p>")
+        sb.append(notify.content)
+        sb.append("</p>")
+        sb.append("<br>")
+        sb.append("<br>")
+
+        sb.append("<font color=\"#808080\">")
+        sb.append(notify.createdAt.substring(0, 10))
+        sb.append("</font>")
+
+        var rxDialogSureCancel = RxDialogSureCancel(mContext)
+        rxDialogSureCancel.contentView.text = Html.fromHtml(sb.toString())
+        rxDialogSureCancel.contentView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14.0f)
+        rxDialogSureCancel.contentView.gravity = Gravity.LEFT
+        rxDialogSureCancel.titleView.text = "您有新的通知"
+        rxDialogSureCancel.titleView.textSize = 16.0f
+        rxDialogSureCancel.setSure("知道了")
+        rxDialogSureCancel.sureView.setOnClickListener {
+            rxDialogSureCancel.cancel()
+        }
+        rxDialogSureCancel.setCancel("查看详情")
+        rxDialogSureCancel.cancelView.setOnClickListener {
+            rxDialogSureCancel.cancel()
+            var intent = Intent(this, NotifyDetailActivity::class.java)
+            intent.putExtra("notify", notify)
+            intent.putExtra("notifyReceiver", notifyReceiver)
+            startActivity(intent)
+        }
+        rxDialogSureCancel.show()
+    }
 
     var tab_position = 0
     override fun onRestart() {

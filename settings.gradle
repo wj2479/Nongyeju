@@ -1,1 +1,1 @@
-include ':app', ':core', ':library', ':zloadingview'
+include ':app', ':core', ':library', ':zloadingview', ':treeview_lib'

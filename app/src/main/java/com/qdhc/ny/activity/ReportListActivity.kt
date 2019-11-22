@@ -60,9 +60,9 @@ class ReportListActivity : BaseActivity() {
         type = intent.getIntExtra("type", 0)
 
         when (type) {
-            Constant.REPORT_TYPE_DAY -> title_tv_title.text = project.name + "工程日报列表"
-            Constant.REPORT_TYPE_WEEK -> title_tv_title.text = project.name + "工程周报列表"
-            Constant.REPORT_TYPE_MONTH -> title_tv_title.text = project.name + "工程月报列表"
+            Constant.REPORT_TYPE_DAY -> title_tv_title.text = "工程日报列表"
+            Constant.REPORT_TYPE_WEEK -> title_tv_title.text = "工程周报列表"
+            Constant.REPORT_TYPE_MONTH -> title_tv_title.text = "工程月报列表"
         }
         initRefresh()
     }

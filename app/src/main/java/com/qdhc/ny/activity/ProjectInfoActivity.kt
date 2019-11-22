@@ -77,8 +77,14 @@ class ProjectInfoActivity : BaseActivity() {
             // 标签的数据
             var labels = ArrayList<ILabel>()
             split.forEach { text ->
-                labels.add(TagLabel(text, text))
+                if (!text.trim().isEmpty())
+                    labels.add(TagLabel(text, text))
             }
+
+            if (labels.size == 0) {
+                labels.add(TagLabel("无标签", "无标签"))
+            }
+
             label_me.setLabels(labels)
         }
 

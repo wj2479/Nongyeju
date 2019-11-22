@@ -9,8 +9,8 @@ android {
         applicationId "com.qdhc.ny"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 8
-        versionName "1.0.8"
+        versionCode 9
+        versionName "1.0.9"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
@@ -98,13 +98,12 @@ dependencies {
     implementation 'cjt.library.wheel:camera:1.1.9'
     // 可拖动进度条
     implementation 'com.xw.repo:bubbleseekbar:3.18-lite'
-    // 树形控件
-    implementation 'me.texy.treeview:treeview_lib:1.0.6'
     // eventbus
     implementation 'org.greenrobot:eventbus:3.1.1'
     // 标签控件
     implementation 'com.lcodecorex:labellayout:1.0.1'
     implementation project(path: ':zloadingview')
+    implementation project(path: ':treeview_lib')
 }
 
 repositories {

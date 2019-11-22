@@ -81,7 +81,7 @@ class MessageFragment : BaseFragment() {
         val emptyView = layoutInflater.inflate(R.layout.common_empty, null)
         emptyView.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT)
-        emptyView.findViewById<TextView>(R.id.tv_empty).text = "没有新的消息"
+        emptyView.findViewById<TextView>(R.id.tv_empty).text = "没有通知消息"
         //添加空视图
         mAdapter.emptyView = emptyView
     }

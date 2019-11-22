@@ -6,10 +6,7 @@ import android.view.View
 import cn.bmob.v3.BmobUser
 import com.qdhc.ny.LoginActivity
 import com.qdhc.ny.R
-import com.qdhc.ny.activity.FeedbackActivity
-import com.qdhc.ny.activity.UpdatePwdActivity
-import com.qdhc.ny.activity.UserInfoActivity
-import com.qdhc.ny.activity.UserManagerActivity
+import com.qdhc.ny.activity.*
 import com.qdhc.ny.base.BaseFragment
 import com.qdhc.ny.bmob.UserInfo
 import com.qdhc.ny.common.ProjectData
@@ -64,6 +61,11 @@ class MyFragment : BaseFragment() {
         ll_usermanager.setOnClickListener {
             //用户管理
             startActivity(Intent(activity, UserManagerActivity::class.java))
+        }
+
+        ll_notify.setOnClickListener {
+            //用户通知
+            startActivity(Intent(activity, NotifyActivity::class.java).putExtra("user", userInfo))
         }
     }
 

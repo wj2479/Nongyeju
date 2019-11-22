@@ -171,7 +171,7 @@
                     android:background="@color/line_waw" />
 
                 <LinearLayout
-                    android:id="@+id/ll_notify_vertify"
+                    android:id="@+id/ll_notify"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:layout_marginTop="@dimen/dp_8">

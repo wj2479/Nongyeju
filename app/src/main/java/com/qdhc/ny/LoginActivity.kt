@@ -49,7 +49,7 @@ class LoginActivity : BaseActivity() {
     override fun initClick() {
 
         logoIv.setOnClickListener {
-            showSingleAlertDialog()
+            //            showSingleAlertDialog()
         }
 
         bt_login.setOnClickListener {
@@ -90,8 +90,8 @@ class LoginActivity : BaseActivity() {
     lateinit var alertDialog2: AlertDialog
 
     fun showSingleAlertDialog() {
-        val items = arrayOf("监理1", "监理2", "东港区", "莒县", "市领导")
-        val values = arrayOf("guest", "www", "donggang", "juxian", "leader")
+        val items = arrayOf("监理1", "南湖", "东港区", "莒县", "市领导")
+        val values = arrayOf("nhjl", "nanhu", "donggang", "juxian", "leader3")
         val alertBuilder = AlertDialog.Builder(this)
         alertBuilder.setTitle("请选择测试账号")
         alertBuilder.setSingleChoiceItems(items, 0,

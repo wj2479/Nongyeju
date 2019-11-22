@@ -1,18 +1,31 @@
 package com.qdhc.ny
 
+import android.content.Intent
 import android.support.v4.app.Fragment
+import android.text.Html
+import android.util.TypedValue
+import android.view.Gravity
+import android.widget.Toast
+import cn.bmob.v3.BmobQuery
+import cn.bmob.v3.exception.BmobException
+import cn.bmob.v3.listener.FindListener
+import cn.bmob.v3.listener.QueryListener
 import com.flyco.tablayout.listener.CustomTabEntity
 import com.flyco.tablayout.listener.OnTabSelectListener
 import com.google.gson.Gson
+import com.qdhc.ny.activity.NotifyDetailActivity
 import com.qdhc.ny.adapter.TabFragmentPagerAdapter
 import com.qdhc.ny.base.BaseActivity
 import com.qdhc.ny.bean.TabIconBean
+import com.qdhc.ny.bmob.Notify
+import com.qdhc.ny.bmob.NotifyReceiver
 import com.qdhc.ny.bmob.UserInfo
 import com.qdhc.ny.fragment.ContactsTabFragment
 import com.qdhc.ny.fragment.MyFragment
 import com.qdhc.ny.fragment.ProjectTabFragment
 import com.qdhc.ny.fragment.ReportTabFragment
 import com.qdhc.ny.utils.SharedPreferencesUtils
+import com.vondear.rxui.view.dialog.RxDialogSureCancel
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
@@ -33,6 +46,7 @@ class Main2Activity : BaseActivity() {
     }
 
     override fun initData() {
+        getNotifyData()
     }
 
     //UI
@@ -92,4 +106,74 @@ class Main2Activity : BaseActivity() {
         vp.setNoScroll(true)
     }
 
+    /**
+     * 获取通知数据
+     */
+    fun getNotifyData() {
+        val categoryBmobQuery = BmobQuery<NotifyReceiver>()
+        categoryBmobQuery.addWhereEqualTo("uid", userInfo.objectId)
+        categoryBmobQuery.addWhereEqualTo("isRead", false)
+        categoryBmobQuery.order("-createdAt")
+        categoryBmobQuery.setLimit(1)
+        categoryBmobQuery.findObjects(
+                object : FindListener<NotifyReceiver>() {
+                    override fun done(list: List<NotifyReceiver>, e: BmobException?) {
+                        if (e == null) {
+                            if (list.size > 0) {
+                                var notifyReceiver = list[0]
+                                val categoryBmobQuery = BmobQuery<Notify>()
+                                categoryBmobQuery.getObject(notifyReceiver.nid, object : QueryListener<Notify>() {
+                                    override fun done(notify: Notify, e: BmobException?) {
+                                        initDialog(notify, notifyReceiver)
+                                    }
+                                })
+                            }
+                        }
+                    }
+                })
+    }
+
+    private fun initDialog(notify: Notify, notifyReceiver: NotifyReceiver) {
+        var sb = StringBuffer()
+        sb.append("<p>")
+        sb.append(notify.content)
+        sb.append("</p>")
+        sb.append("<br>")
+        sb.append("<br>")
+
+        sb.append("<font color=\"#808080\">")
+        sb.append(notify.createdAt.substring(0, 10))
+        sb.append("</font>")
+
+        var rxDialogSureCancel = RxDialogSureCancel(mContext)
+        rxDialogSureCancel.contentView.text = Html.fromHtml(sb.toString())
+        rxDialogSureCancel.contentView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14.0f)
+        rxDialogSureCancel.contentView.gravity = Gravity.LEFT
+        rxDialogSureCancel.titleView.text = "您有新的通知"
+        rxDialogSureCancel.titleView.textSize = 16.0f
+        rxDialogSureCancel.setSure("知道了")
+        rxDialogSureCancel.sureView.setOnClickListener {
+            rxDialogSureCancel.cancel()
+        }
+        rxDialogSureCancel.setCancel("查看详情")
+        rxDialogSureCancel.cancelView.setOnClickListener {
+            rxDialogSureCancel.cancel()
+            var intent = Intent(this, NotifyDetailActivity::class.java)
+            intent.putExtra("notify", notify)
+            intent.putExtra("notifyReceiver", notifyReceiver)
+            startActivity(intent)
+        }
+        rxDialogSureCancel.show()
+    }
+
+    private var clickTime: Long = 0 // 第一次点击的时间
+
+    override fun onBackPressed() {
+        if (System.currentTimeMillis() - clickTime > 2000) {
+            Toast.makeText(this, "再按一次键退出", Toast.LENGTH_SHORT).show()
+            clickTime = System.currentTimeMillis()
+        } else {
+            finish()
+        }
+    }
 }
