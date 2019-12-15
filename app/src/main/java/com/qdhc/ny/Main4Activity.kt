@@ -21,10 +21,9 @@ import com.qdhc.ny.bean.TabIconBean
 import com.qdhc.ny.bmob.Notify
 import com.qdhc.ny.bmob.NotifyReceiver
 import com.qdhc.ny.bmob.UserInfo
-import com.qdhc.ny.fragment.ContactsFragment
 import com.qdhc.ny.fragment.ContradictionListFragment
 import com.qdhc.ny.fragment.MyFragment
-import com.qdhc.ny.fragment.ReportListFragment
+import com.qdhc.ny.fragment.NotifyFragment
 import com.qdhc.ny.utils.SharedPreferencesUtils
 import com.vondear.rxui.view.dialog.RxDialogSureCancel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -50,25 +49,22 @@ class Main4Activity : BaseActivity() {
 
     //UI
     private val mTabEntities = ArrayList<CustomTabEntity>()
-    private val mIconUnselectIds = intArrayOf(R.drawable.ic_schedule,
-            R.drawable.ic_quality,
-            R.drawable.ic_contacts,
+    private val mIconUnselectIds = intArrayOf(R.drawable.ic_list,
+            R.drawable.ic_message,
             R.drawable.ic_my)
-    private val mIconSelectIds = intArrayOf(R.drawable.ic_schedule_select,
-            R.drawable.ic_quality_select,
-            R.drawable.ic_contacts_select,
+    private val mIconSelectIds = intArrayOf(R.drawable.ic_list_select,
+            R.drawable.ic_message_select,
             R.drawable.ic_my_select)
 
     override fun initView() {
         userInfo = SharedPreferencesUtils.loadLogin(this)
 
         //获取数据 在values/arrays.xml中进行定义然后调用
-        var tabTitle = resources.getStringArray(R.array.tab2_titles)
+        var tabTitle = resources.getStringArray(R.array.tab3_titles)
         //将fragment装进列表中
         var fragmentList = ArrayList<Fragment>()
         fragmentList.add(ContradictionListFragment(userInfo.areaId, userInfo.district, true))
-        fragmentList.add(ReportListFragment(userInfo.areaId, userInfo.district, true))
-        fragmentList.add(ContactsFragment(userInfo.areaId, userInfo.district, true))
+        fragmentList.add(NotifyFragment())
         fragmentList.add(MyFragment())
         //viewpager加载adapter
         vp.adapter = TabFragmentPagerAdapter(supportFragmentManager, fragmentList, tabTitle)

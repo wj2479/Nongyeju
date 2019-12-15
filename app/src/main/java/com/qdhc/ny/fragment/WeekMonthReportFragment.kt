@@ -13,41 +13,49 @@ import cn.bmob.v3.BmobQuery
 import cn.bmob.v3.exception.BmobException
 import cn.bmob.v3.listener.FindListener
 import com.qdhc.ny.R
-import com.qdhc.ny.activity.DailyReportDetailsActivity
-import com.qdhc.ny.adapter.DailyReportAdapter
+import com.qdhc.ny.activity.ReportDetailsActivity
+import com.qdhc.ny.adapter.ReportAdapter
 import com.qdhc.ny.base.BaseFragment
-import com.qdhc.ny.bmob.DailyReport
 import com.qdhc.ny.bmob.Project
+import com.qdhc.ny.bmob.Report
 import com.qdhc.ny.bmob.UserInfo
+import com.qdhc.ny.common.ProjectData
+import com.qdhc.ny.eventbus.ProjectEvent
 import com.qdhc.ny.utils.SharedPreferencesUtils
 import com.yanzhenjie.recyclerview.swipe.widget.DefaultItemDecoration
 import kotlinx.android.synthetic.main.activity_sign_in_sear.*
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 
 /**
- * 日报
+ * 日报 周报 月报
  * A simple [Fragment] subclass.
  */
 @SuppressLint("ValidFragment")
-class DayReportFragment(project: Project) : BaseFragment() {
+class WeekMonthReportFragment(project: Project, type: Int) : BaseFragment() {
 
     lateinit var userInfo: UserInfo
+
+    var reportProjects = ArrayList<Project>()
 
     /**
      * 项目的日报记录
      */
-    var reports = ArrayList<DailyReport>()
+    var reports = ArrayList<Report>()
 
-    lateinit var mAdapter: DailyReportAdapter
+    lateinit var mAdapter: ReportAdapter
 
+    var type = 0
     var project: Project
 
     init {
+        this.type = type
         this.project = project
     }
 
     override fun intiLayout(): Int {
-        return R.layout.fragment_day_report
+        return com.qdhc.ny.R.layout.fragment_week_month_report
     }
 
     override fun initView() {
@@ -61,13 +69,14 @@ class DayReportFragment(project: Project) : BaseFragment() {
         smrw.setSwipeItemClickListener { itemView, position ->
             if (reports.size > position) {
                 var report = reports[position]
-                var intent = Intent(context, DailyReportDetailsActivity::class.java)
+                var intent = Intent(context, ReportDetailsActivity::class.java)
+                intent.putExtra("project", project)
                 intent.putExtra("report", report)
                 startActivity(intent)
             }
         }
 
-        mAdapter = DailyReportAdapter(activity, reports)
+        mAdapter = ReportAdapter(activity, reports)
         smrw.adapter = mAdapter
 
         val emptyView = layoutInflater.inflate(com.qdhc.ny.R.layout.common_empty, null)
@@ -76,6 +85,15 @@ class DayReportFragment(project: Project) : BaseFragment() {
         emptyView.findViewById<TextView>(R.id.tv_empty).text = "暂无记录"
         //添加空视图
         mAdapter.emptyView = emptyView
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onMessageEvent(event: ProjectEvent) {
+//        Log.e("TAG", "进度事件--->" + ProjectData.getInstance().projects)
+        reportProjects.clear()
+        reportProjects.addAll(ProjectData.getInstance().projects)
+        mAdapter.notifyDataSetChanged()
     }
 
     override fun initClick() {
@@ -95,13 +113,13 @@ class DayReportFragment(project: Project) : BaseFragment() {
 
     //获取数据
     fun getData() {
-        val categoryBmobQuery = BmobQuery<DailyReport>()
-//        categoryBmobQuery.addWhereEqualTo("uid", userInfo.objectId)
+        val categoryBmobQuery = BmobQuery<Report>()
         categoryBmobQuery.addWhereEqualTo("pid", project.objectId)
+        categoryBmobQuery.addWhereEqualTo("type", type)
         categoryBmobQuery.order("-createdAt")
         categoryBmobQuery.findObjects(
-                object : FindListener<DailyReport>() {
-                    override fun done(list: List<DailyReport>?, e: BmobException?) {
+                object : FindListener<Report>() {
+                    override fun done(list: List<Report>?, e: BmobException?) {
                         if (e == null) {
                             reports.clear()
                             reports.addAll(list!!)

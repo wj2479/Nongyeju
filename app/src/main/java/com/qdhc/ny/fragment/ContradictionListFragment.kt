@@ -14,7 +14,7 @@ import cn.bmob.v3.exception.BmobException
 import cn.bmob.v3.listener.FindListener
 import com.qdhc.ny.activity.AddProjectActivity
 import com.qdhc.ny.activity.ProjectInfoActivity
-import com.qdhc.ny.adapter.ProjectWithScheduleAdapter
+import com.qdhc.ny.adapter.ProjectWithReportAndScheduleAdapter
 import com.qdhc.ny.base.BaseFragment
 import com.qdhc.ny.bmob.ProjSchedule
 import com.qdhc.ny.bmob.Project
@@ -67,7 +67,9 @@ class ContradictionListFragment(areaId: Int, villageId: String, isShowTitle: Boo
 
     override fun initData() {
         userInfo = SharedPreferencesUtils.loadLogin(context)
-        if (userInfo.role == 1) {
+        if (userInfo.role == 4) {
+            addIv.visibility = View.VISIBLE
+        } else {
             addIv.visibility = View.GONE
         }
         initRefresh()
@@ -77,7 +79,7 @@ class ContradictionListFragment(areaId: Int, villageId: String, isShowTitle: Boo
 
     }
 
-    lateinit var mAdapter: ProjectWithScheduleAdapter
+    lateinit var mAdapter: ProjectWithReportAndScheduleAdapter
     private fun initRefresh() {
         smrw!!.layoutManager = LinearLayoutManager(activity) as RecyclerView.LayoutManager?
         smrw!!.addItemDecoration(DefaultItemDecoration(ContextCompat.getColor(activity!!, com.qdhc.ny.R.color.backgroundColor)))
@@ -94,7 +96,7 @@ class ContradictionListFragment(areaId: Int, villageId: String, isShowTitle: Boo
             startActivity(intent)
         }
 
-        mAdapter = ProjectWithScheduleAdapter(activity, projectList)
+        mAdapter = ProjectWithReportAndScheduleAdapter(activity, projectList)
         smrw.adapter = mAdapter
         val emptyView = layoutInflater.inflate(com.qdhc.ny.R.layout.common_empty, null)
         emptyView.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
@@ -117,11 +119,19 @@ class ContradictionListFragment(areaId: Int, villageId: String, isShowTitle: Boo
     //获取数据
     fun getProjectData() {
         val categoryBmobQuery = BmobQuery<Project>()
-        categoryBmobQuery.addWhereEqualTo("area", areaId)
-        if (userInfo.role == 1) {
-            categoryBmobQuery.addWhereEqualTo("manager", userInfo.objectId)
-        } else {
-            categoryBmobQuery.addWhereEqualTo("village", villageId)
+
+        when (userInfo.role) { // 监理
+            1 -> {
+                categoryBmobQuery.addWhereEqualTo("area", areaId)
+                categoryBmobQuery.addWhereEqualTo("manager", userInfo.objectId)
+            }
+            2 -> categoryBmobQuery.addWhereEqualTo("area", areaId)           // 区县
+            3 -> {                                                      //市局
+            }
+            4 -> {                      // 乡镇
+                categoryBmobQuery.addWhereEqualTo("area", areaId)
+                categoryBmobQuery.addWhereEqualTo("village", villageId)
+            }
         }
         categoryBmobQuery.order("-createdAt")
         categoryBmobQuery.findObjects(

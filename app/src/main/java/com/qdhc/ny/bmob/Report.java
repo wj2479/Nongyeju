@@ -20,6 +20,7 @@ public class Report extends BmobObject {
      * 用户ID
      */
     String uid;
+
     /**
      * 今日工作
      */
@@ -43,15 +44,15 @@ public class Report extends BmobObject {
     /**
      * 上传地址
      */
-    String address;
+    String address = "";
     /**
      * 街道名
      */
-    String street;
+    String street = "";
     /**
      * 区县名字
      */
-    String district;
+    String district = "";
     /**
      * 类型   日报 周报 月报
      */

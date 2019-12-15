@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/backgroundColor"
     android:orientation="vertical">
-
-    <include layout="@layout/layout_title_theme" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -39,17 +36,65 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="工程名称" />
+                        android:textStyle="bold"
+                        android:text="日志名称" />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/nameTv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp" android:textSize="@dimen/sp_16"></TextView>
+                        android:layout_marginLeft="8dp"
+                        android:textSize="@dimen/sp_16"></EditText>
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/ll_location132"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_45"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/dp_8"
+                    android:paddingRight="@dimen/dp_8">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text="检验结果" />
+
+                    <RadioGroup
+                        android:id="@+id/radiogroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/radiobut1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="合格"></RadioButton>
+
+                        <RadioButton
+                            android:id="@+id/radiobut2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="一般"></RadioButton>
+
+                        <RadioButton
+                            android:id="@+id/radiobut3"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="不合格"></RadioButton>
+                    </RadioGroup>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_location"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_45"
                     android:layout_marginTop="@dimen/dp_8"
@@ -62,6 +107,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textStyle="bold"
                         android:text="当前位置" />
 
                     <TextView
@@ -73,72 +119,32 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/processLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_8"
                     android:background="@color/white"
                     android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/dp_8" android:orientation="vertical"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/dp_8"
                     android:paddingRight="@dimen/dp_8">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" android:layout_marginTop="@dimen/dp_8">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="当前进度" />
-
-                        <TextView
-                            android:id="@+id/processTv"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:layout_weight="1" android:visibility="gone"></TextView>
-                    </LinearLayout>
-
-                    <com.xw.repo.BubbleSeekBar
-                        android:id="@+id/bubbleSeekbar"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:layout_marginBottom="8dp"
-                        app:bsb_bubble_color="@color/themecolor"
-                        app:bsb_bubble_text_color="@color/white"
-                        app:bsb_max="100"
-                        app:bsb_min="0"
-                        app:bsb_progress="0"
-                        app:bsb_second_track_color="@color/colorPrimary"
-                        app:bsb_section_text_position="bottom_sides"
-                        app:bsb_show_section_text="true"
-                        app:bsb_show_thumb_text="true"
-                        app:bsb_track_color="@color/themecolor" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_8"
-                    android:background="@color/white"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical"
-                    android:padding="@dimen/dp_8">
-
                     <TextView
-                        android:layout_width="match_parent"
+                        android:id="@+id/tv_work"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingBottom="@dimen/dp_8"
-                        android:text="进度描述" />
+                        android:textStyle="bold"
+                        android:text="工作详情" />
 
                     <EditText
-                        android:id="@+id/edt_content"
+                        android:id="@+id/edt_work"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_4"
                         android:background="@null"
                         android:gravity="left|top"
-                        android:minHeight="100dp" />
+                        android:hint="请输入工作内容"
+                        android:minHeight="120dp" />
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -154,7 +160,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingBottom="@dimen/dp_8"
-                        android:text="上传图片/视频" />
+                        android:textStyle="bold"
+                        android:text="现场图片/视频" />
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/rlv"
@@ -172,7 +179,7 @@
                     android:layout_marginRight="24dp"
                     android:layout_marginBottom="@dimen/dp_12"
                     android:background="@drawable/bg_themecolor_solid2"
-                    android:text="添  加"
+                    android:text="上  报"
                     android:textColor="@color/white"
                     android:textSize="@dimen/textsize_8" />
             </LinearLayout>

@@ -168,13 +168,15 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1px"
-                    android:background="@color/line_waw" />
+                    android:background="@color/line_waw"
+                    android:visibility="gone" />
 
                 <LinearLayout
                     android:id="@+id/ll_notify"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
-                    android:layout_marginTop="@dimen/dp_8">
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="0dp"
@@ -223,7 +225,6 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:drawableRight="@drawable/li_fh"
                         android:gravity="center_vertical|right"
                         android:textColor="#333333" />
                 </LinearLayout>

@@ -3,22 +3,25 @@ package com.qdhc.ny
 import android.Manifest
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
-import android.app.Activity
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Build
+import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.support.v4.app.NotificationCompat
+import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
 import android.text.Html
 import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.KeyEvent
+import android.widget.Toast
 import cn.bmob.v3.BmobQuery
 import cn.bmob.v3.exception.BmobException
 import cn.bmob.v3.listener.FindListener
@@ -31,8 +34,9 @@ import com.flyco.tablayout.listener.CustomTabEntity
 import com.flyco.tablayout.listener.OnTabSelectListener
 import com.google.gson.Gson
 import com.luck.picture.lib.permissions.RxPermissions
+import com.qdhc.ny.activity.CameraActivity
 import com.qdhc.ny.activity.NotifyDetailActivity
-import com.qdhc.ny.activity.SignInActivity
+import com.qdhc.ny.activity.UpdateDailyReportActivity
 import com.qdhc.ny.adapter.TabFragmentPagerAdapter
 import com.qdhc.ny.base.BaseActivity
 import com.qdhc.ny.base.BaseApplication
@@ -41,10 +45,11 @@ import com.qdhc.ny.bmob.*
 import com.qdhc.ny.common.Constant
 import com.qdhc.ny.common.ProjectData
 import com.qdhc.ny.eventbus.ProjectEvent
+import com.qdhc.ny.fragment.CheckFragment
 import com.qdhc.ny.fragment.ContradictionListFragment
-import com.qdhc.ny.fragment.IndexFragment
 import com.qdhc.ny.fragment.MyFragment
-import com.qdhc.ny.fragment.ReportListFragment
+import com.qdhc.ny.fragment.NotifyFragment
+import com.qdhc.ny.service.UpadateManager
 import com.qdhc.ny.utils.SharedPreferencesUtils
 import com.sj.core.utils.SharedPreferencesUtil
 import com.sj.core.utils.ToastUtil
@@ -56,6 +61,7 @@ class MainActivity : BaseActivity() {
 
     var gson = Gson()
 
+    val GET_PERMISSION_REQUEST = 100; //权限申请自定义码
     // 记录上一次上传的位置信息
     var lastUploadLocation: AMapLocation? = null
     // 上传数据之间最小的距离
@@ -73,12 +79,11 @@ class MainActivity : BaseActivity() {
     }
 
     override fun initData() {
-
+        UpadateManager.checkVersion(this)
         getNotifyData()
         if (Build.VERSION.SDK_INT >= 23) {
             requestPermissions()
         }
-
     }
 
     private fun requestPermissions() {
@@ -115,12 +120,12 @@ class MainActivity : BaseActivity() {
     private val mIconUnselectIds = intArrayOf(R.drawable.ic_list,
             R.drawable.ic_schedule,
             R.drawable.ic_upload,
-            R.drawable.ic_quality,
+            R.drawable.ic_message,
             R.drawable.ic_my)
     private val mIconSelectIds = intArrayOf(R.drawable.ic_list_select,
             R.drawable.ic_schedule_select,
             R.drawable.ic_upload,
-            R.drawable.ic_quality_select,
+            R.drawable.ic_message_select,
             R.drawable.ic_my_select)
 
     var projectList = ArrayList<Project>()
@@ -132,10 +137,10 @@ class MainActivity : BaseActivity() {
         var tabTitle = resources.getStringArray(R.array.tab_titles)
         //将fragment装进列表中
         var fragmentList = ArrayList<Fragment>()
-        fragmentList.add(IndexFragment())
         fragmentList.add(ContradictionListFragment(userInfo.areaId, userInfo.district, true))
+        fragmentList.add(CheckFragment())
         fragmentList.add(MyFragment())
-        fragmentList.add(ReportListFragment(userInfo.areaId, userInfo.district, true))
+        fragmentList.add(NotifyFragment())
         fragmentList.add(MyFragment())
         //viewpager加载adapter
         vp.adapter = TabFragmentPagerAdapter(supportFragmentManager, fragmentList, tabTitle)
@@ -192,8 +197,6 @@ class MainActivity : BaseActivity() {
                                 val categoryBmobQuery = BmobQuery<Notify>()
                                 categoryBmobQuery.getObject(notifyReceiver.nid, object : QueryListener<Notify>() {
                                     override fun done(notify: Notify, e: BmobException?) {
-
-
                                         initDialog(notify, notifyReceiver)
                                     }
                                 })
@@ -246,18 +249,30 @@ class MainActivity : BaseActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (data != null) {
-            if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
-                tl.currentTab = 0
-            }
+        Log.e("TAG", "onActivityResult--> " + resultCode)
+
+        if (resultCode == 101 || resultCode == 102) {
+            val intent = Intent(data)
+            intent.setClass(this@MainActivity, UpdateDailyReportActivity::class.java);
+            intent.putExtra("code", resultCode)
+            intent.putExtra("project", projectList.get(0))
+            startActivity(intent)
+        } else if (resultCode == 103) {
+            Toast.makeText(this, "请检查相机权限~", Toast.LENGTH_SHORT).show();
         }
+
     }
 
     private fun initPager() {
         tl.setOnTabSelectListener(object : OnTabSelectListener {
             override fun onTabSelect(position: Int) {
                 if (position == 2) {
-                    startActivityForResult(Intent(this@MainActivity, SignInActivity::class.java), 1)
+//                    startActivityForResult(Intent(this@MainActivity, SignInActivity::class.java), 1)
+                    if (projectList.size > 0) {
+                        getPermissions()
+                    } else {
+                        ToastUtil.show(this@MainActivity, "您还没有负责的项目")
+                    }
                 } else {
                     vp.currentItem = position
                     tab_position = position
@@ -266,7 +281,7 @@ class MainActivity : BaseActivity() {
 
             override fun onTabReselect(position: Int) {
                 if (position == 2) {
-                    startActivity(Intent(this@MainActivity, SignInActivity::class.java))
+//                    startActivity(Intent(this@MainActivity, SignInActivity::class.java))
                 }
             }
         })
@@ -291,6 +306,64 @@ class MainActivity : BaseActivity() {
         vp.offscreenPageLimit = 5
         vp.setNoScroll(true)
     }
+
+    /**
+     * 获取权限
+     */
+    private fun getPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager
+                            .PERMISSION_GRANTED &&
+                    ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager
+                            .PERMISSION_GRANTED &&
+                    ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager
+                            .PERMISSION_GRANTED) {
+                startActivityForResult(Intent(this, CameraActivity::class.java), 100);
+            } else {
+                //不具有获取权限，需要进行权限申请
+                ActivityCompat.requestPermissions(this, arrayOf(
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.RECORD_AUDIO,
+                        Manifest.permission.CAMERA
+                ), GET_PERMISSION_REQUEST);
+            }
+        } else {
+            startActivityForResult(Intent(this, CameraActivity::class.java), 100);
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == GET_PERMISSION_REQUEST) {
+            var size = 0;
+            if (grantResults.size >= 1) {
+                var writeResult = grantResults[0];
+                //读写内存权限
+                var writeGranted = writeResult == PackageManager.PERMISSION_GRANTED;//读写内存权限
+                if (!writeGranted) {
+                    size++;
+                }
+                //录音权限
+                var recordPermissionResult = grantResults[1];
+                var recordPermissionGranted = recordPermissionResult == PackageManager.PERMISSION_GRANTED;
+                if (!recordPermissionGranted) {
+                    size++;
+                }
+                //相机权限
+                var cameraPermissionResult = grantResults[2];
+                var cameraPermissionGranted = cameraPermissionResult == PackageManager.PERMISSION_GRANTED;
+                if (!cameraPermissionGranted) {
+                    size++;
+                }
+                if (size == 0) {
+                    startActivityForResult(Intent(this, CameraActivity::class.java), 100);
+                } else {
+                    Toast.makeText(this, "请到设置-权限管理中开启", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
 
     override fun onResume() {
         super.onResume()

@@ -19,7 +19,7 @@ class SignInActivity : BaseActivity() {
 
         //viewpager加载adapter
         supportFragmentManager.beginTransaction().add(R.id.contentLayout, SignInFragment()).commitAllowingStateLoss()
-        title_tv_title.text = "签到"
+        title_tv_title.text = "拍照上传"
     }
 
 

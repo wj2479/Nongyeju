@@ -2,19 +2,26 @@
 <resources>
     <!--底部按钮-->
     <string-array name="tab_titles">
-        <item>主页</item>
-        <item>进度</item>
-        <item>签到</item>
-        <item>质量</item>
-        <item>我</item>
+        <item>工程</item>
+        <item>考核</item>
+        <item>拍照</item>
+        <item>通知</item>
+        <item>个人</item>
     </string-array>
 
     <string-array name="tab2_titles">
         <item>工程</item>
         <item>质量</item>
         <item>人员</item>
-        <item>我</item>
+        <item>个人</item>
     </string-array>
+
+    <string-array name="tab3_titles">
+        <item>工程</item>
+        <item>通知</item>
+        <item>个人</item>
+    </string-array>
+
     <!--信息类型-->
     <string-array name="types">
         <item>其它信息</item>

@@ -9,8 +9,8 @@ android {
         applicationId "com.qdhc.ny"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 9
-        versionName "1.0.9"
+        versionCode 12
+        versionName "1.1.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
@@ -102,6 +102,16 @@ dependencies {
     implementation 'org.greenrobot:eventbus:3.1.1'
     // 标签控件
     implementation 'com.lcodecorex:labellayout:1.0.1'
+    // 仿Iphone对话框
+    implementation 'com.baoyz.actionsheet:library:1.1.7'
+
+    // 版本更新框架
+//    implementation 'com.github.xuexiangjys:XUpdate:1.1.0'
+//    implementation 'com.zhy:okhttputils:2.6.2'
+
+    // 图标 控件库
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.0'
+
     implementation project(path: ':zloadingview')
     implementation project(path: ':treeview_lib')
 }

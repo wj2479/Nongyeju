@@ -3,7 +3,6 @@ package com.qdhc.ny.fragment
 import android.annotation.SuppressLint
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
-import android.util.Log
 import android.view.View
 import com.qdhc.ny.adapter.MyFragmentPagerAdapter
 import com.qdhc.ny.base.BaseFragment
@@ -49,8 +48,6 @@ class ProjectTabFragment(areaId: Int, isShowTitle: Boolean) : BaseFragment() {
         }
         var mTitles = arrayOfNulls<String>(mTitleList.size)
         mTitleList.toArray(mTitles)
-
-        Log.e("TAG", "Titles->" + mTitles.size)
 
         mAdapter = MyFragmentPagerAdapter(childFragmentManager)
         mAdapter.addTitlesAndFragments(mTitles, mFragments)

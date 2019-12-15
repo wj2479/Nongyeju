@@ -84,13 +84,13 @@ class ReportListActivity : BaseActivity() {
         smrw.addItemDecoration(DefaultItemDecoration(ContextCompat.getColor(mContext, R.color.backgroundColor)))
         // RecyclerView Item点击监听。
         smrw.setSwipeItemClickListener { itemView, position ->
-
-            var report = reports[position]
-
-            var intent = Intent(this@ReportListActivity, ReportDetailsActivity::class.java)
-            intent.putExtra("project", project)
-            intent.putExtra("report", report)
-            startActivity(intent)
+            if (reports.size > position) {
+                var report = reports[position]
+                var intent = Intent(this@ReportListActivity, ReportDetailsActivity::class.java)
+                intent.putExtra("project", project)
+                intent.putExtra("report", report)
+                startActivity(intent)
+            }
         }
 
         mAdapter = ReportAdapter(this, reports)

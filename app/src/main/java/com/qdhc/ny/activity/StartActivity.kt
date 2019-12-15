@@ -76,11 +76,11 @@ class StartActivity : BaseActivity() {
     fun getHasVillages() {
         val categoryBmobQuery = BmobQuery<Villages>()
         categoryBmobQuery.findObjects(object : FindListener<Villages>() {
-            override fun done(list: List<Villages>, e: BmobException?) {
+            override fun done(list: List<Villages>?, e: BmobException?) {
                 if (e == null) {
                     Log.e("村落列表结果-----》", list.toString())
                     ProjectData.getInstance().villages = list
-                    list.forEach { village -> ProjectData.getInstance().villageMap.put(village.objectId, village) }
+                    list?.forEach { village -> ProjectData.getInstance().villageMap.put(village.objectId, village) }
                 } else {
                     Log.e("异常-----》", e.toString())
                 }

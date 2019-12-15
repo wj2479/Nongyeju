@@ -4,7 +4,6 @@ package com.qdhc.ny.fragment
 import android.content.Intent
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
-import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.ViewGroup
 import android.widget.TextView
@@ -20,6 +19,7 @@ import com.qdhc.ny.bmob.UserInfo
 import com.qdhc.ny.utils.SharedPreferencesUtils
 import com.yanzhenjie.recyclerview.swipe.widget.DefaultItemDecoration
 import kotlinx.android.synthetic.main.activity_sign_in_sear.*
+import android.support.v7.widget.LinearLayoutManager as LinearLayoutManager1
 
 
 /**
@@ -52,7 +52,7 @@ class NotifyPublishFragment : BaseFragment() {
     lateinit var mAdapter: NotifyAdapter
 
     private fun initRefresh() {
-        smrw!!.layoutManager = LinearLayoutManager(activity)
+        smrw!!.layoutManager = LinearLayoutManager1(activity)
         smrw!!.addItemDecoration(DefaultItemDecoration(ContextCompat.getColor(activity!!, R.color.backgroundColor)))
 
         // RecyclerView Item点击监听。

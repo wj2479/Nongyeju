@@ -4,22 +4,19 @@ import android.annotation.SuppressLint
 import android.support.v4.app.Fragment
 import com.qdhc.ny.adapter.MyFragmentPagerAdapter
 import com.qdhc.ny.base.BaseFragment
+import com.qdhc.ny.bmob.Project
 import com.qdhc.ny.common.Constant
 import kotlinx.android.synthetic.main.fragment_report.*
 
-
 @SuppressLint("ValidFragment")
-class ReportFragment : BaseFragment() {
+class ReportFragment(project: Project) : BaseFragment() {
 
     lateinit var mAdapter: MyFragmentPagerAdapter
 
-    var areaId = 0
-
-    var isShowTitle = true
+    var project: Project
 
     init {
-        this.areaId = areaId
-        this.isShowTitle = isShowTitle
+        this.project = project
     }
 
     override fun intiLayout(): Int {
@@ -40,9 +37,9 @@ class ReportFragment : BaseFragment() {
         }
 
         val mFragments = ArrayList<Fragment>()
-        mFragments.add(DayReportFragment(Constant.REPORT_TYPE_DAY))
-        mFragments.add(DayReportFragment(Constant.REPORT_TYPE_WEEK))
-        mFragments.add(DayReportFragment(Constant.REPORT_TYPE_MONTH))
+        mFragments.add(DayReportFragment(project))
+        mFragments.add(WeekMonthReportFragment(project, Constant.REPORT_TYPE_WEEK))
+        mFragments.add(WeekMonthReportFragment(project, Constant.REPORT_TYPE_MONTH))
 
         mAdapter = MyFragmentPagerAdapter(childFragmentManager)
         mAdapter.addTitlesAndFragments(mTitles, mFragments)
@@ -61,11 +58,7 @@ class ReportFragment : BaseFragment() {
 
     override fun initClick() {
 //        addIv.setOnClickListener {
-//            ActionSheet.createBuilder(context, activity?.getSupportFragmentManager())
-//                    .setCancelButtonTitle("取消")
-//                    .setOtherButtonTitles("日报", "周报", "月报")
-//                    .setCancelableOnTouchOutside(true)
-//                    .setListener(this).show();
+//
 //        }
     }
 

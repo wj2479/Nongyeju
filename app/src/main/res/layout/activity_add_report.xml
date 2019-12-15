@@ -166,7 +166,8 @@
                     android:gravity="center_vertical"
                     android:orientation="vertical"
                     android:paddingLeft="@dimen/dp_8"
-                    android:paddingRight="@dimen/dp_8">
+                    android:paddingRight="@dimen/dp_8"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="wrap_content"

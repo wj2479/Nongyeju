@@ -72,7 +72,7 @@ class SignInFragment : BaseFragment() {
     lateinit var aMap: AMap
 
     // 当前定位的数据
-    lateinit var mLocation: AMapLocation
+    var mLocation: AMapLocation? = null
 
     override fun intiLayout(): Int {
         return R.layout.fragment_sign_in
@@ -161,9 +161,11 @@ class SignInFragment : BaseFragment() {
         // 设置默认定位按钮是否显示，非必需设置。
         aMap.uiSettings.isMyLocationButtonEnabled = false
 
-        var cameraUpdate = CameraUpdateFactory
-                .newCameraPosition(CameraPosition(LatLng(mLocation.latitude, mLocation.longitude), 16f, 0f, 0f))
-        aMap.moveCamera(cameraUpdate)
+        if (mLocation != null) {
+            var cameraUpdate = CameraUpdateFactory
+                    .newCameraPosition(CameraPosition(LatLng(mLocation!!.latitude, mLocation!!.longitude), 16f, 0f, 0f))
+            aMap.moveCamera(cameraUpdate)
+        }
     }
 
     override fun initClick() {
@@ -180,8 +182,8 @@ class SignInFragment : BaseFragment() {
                     var sign = Sign()
                     sign.address = mLocation?.address
                     sign.content = content
-                    sign.lat = mLocation?.latitude
-                    sign.lng = mLocation?.longitude
+                    sign.lat = mLocation!!.latitude
+                    sign.lng = mLocation!!.longitude
                     sign.uid = userInfo.objectId
 
                     sign.save(object : SaveListener<String>() {
@@ -259,13 +261,14 @@ class SignInFragment : BaseFragment() {
 
         mLocation = ProjectData.getInstance().location
 
-        tv_address_abbreviation.text = mLocation.address
-        tv_address_map.text = mLocation.address
-        tv_address.text = mLocation.address
+        if (mLocation != null) {
+            tv_address_abbreviation.text = mLocation?.address
+            tv_address_map.text = mLocation?.address
+            tv_address.text = mLocation?.address
+        }
     }
 
     override fun lazyLoad() {
-
 
     }
 

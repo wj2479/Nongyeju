@@ -11,8 +11,6 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
-import android.view.View
 import android.widget.Toast
 import cn.bmob.v3.datatype.BmobFile
 import cn.bmob.v3.exception.BmobException
@@ -26,40 +24,37 @@ import com.qdhc.ny.R
 import com.qdhc.ny.adapter.GridImageAdapter
 import com.qdhc.ny.base.BaseActivity
 import com.qdhc.ny.bmob.ContradictPic
+import com.qdhc.ny.bmob.DailyReport
 import com.qdhc.ny.bmob.Project
-import com.qdhc.ny.bmob.Report
 import com.qdhc.ny.bmob.UserInfo
 import com.qdhc.ny.common.ProjectData
 import com.qdhc.ny.utils.SharedPreferencesUtils
 import com.sj.core.utils.ToastUtil
 import kotlinx.android.synthetic.main.activity_add_project_schedule.bt_add
-import kotlinx.android.synthetic.main.activity_add_project_schedule.nameTv
 import kotlinx.android.synthetic.main.activity_add_project_schedule.rlv
-import kotlinx.android.synthetic.main.activity_add_report.*
+import kotlinx.android.synthetic.main.activity_update_daily_report.*
 import kotlinx.android.synthetic.main.layout_title_theme.*
 import java.io.File
 
-class AddReportActivity : BaseActivity() {
-
+class UpdateDailyReportActivity : BaseActivity() {
     val GET_PERMISSION_REQUEST = 100; //权限申请自定义码
-
-    lateinit var project: Project
 
     lateinit var adapter: GridImageAdapter
 
     lateinit var userInfo: UserInfo
 
-    var mLocation: AMapLocation? = null
+    var project: Project? = null
 
+    var mLocation: AMapLocation? = null
     var selectList = ArrayList<LocalMedia>()
 
-    var type = 0
-
     override fun intiLayout(): Int {
-        return R.layout.activity_add_report
+        return R.layout.activity_update_daily_report
     }
 
     override fun initView() {
+        title_tv_title.text = "日报上传"
+
         //禁止rcyc嵌套滑动
         rlv.isNestedScrollingEnabled = false
         rlv.layoutManager = GridLayoutManager(this, 4) as RecyclerView.LayoutManager?
@@ -74,9 +69,8 @@ class AddReportActivity : BaseActivity() {
                 intent.putExtra("url", localMedia.path)
                 startActivity(intent)
             } else if (localMedia.mimeType == PictureMimeType.ofVideo()) {
-                PictureSelector.create(this@AddReportActivity).externalPictureVideo(localMedia.path);
+                PictureSelector.create(this@UpdateDailyReportActivity).externalPictureVideo(localMedia.path);
             }
-
         }
         rlv.adapter = adapter
     }
@@ -85,41 +79,40 @@ class AddReportActivity : BaseActivity() {
         title_iv_back.setOnClickListener { finish() }
 
         bt_add.setOnClickListener {
-            var workContent = edt_work.text.toString().trim()
-            if (workContent.isEmpty()) {
-                ToastUtil.show(this, "工作内容不能为空")
+            var title = nameTv.text.toString().trim()
+            if (title.isEmpty()) {
+                ToastUtil.show(this, "日报名称不能为空")
                 return@setOnClickListener
             }
 
-            var questionContent = edt_question.text.toString().trim()
-            if (questionContent.isEmpty()) {
-                ToastUtil.show(this, "存在的问题不能为空")
+            var checkId = -1
+            val checkRadioId = radiogroup.checkedRadioButtonId
+            when (checkRadioId) {
+                R.id.radiobut1 -> checkId = 0
+                R.id.radiobut2 -> checkId = 1
+                R.id.radiobut3 -> checkId = 2
+                else -> {
+                    ToastUtil.show(this, "存在的问题不能为空")
+                    return@setOnClickListener
+                }
+            }
+
+            var content = edt_work.text.toString().trim()
+            if (content.isEmpty()) {
+                ToastUtil.show(this, "日报详情不能为空")
                 return@setOnClickListener
             }
 
-            var methodContent = edt_method.text.toString().trim()
-            if (methodContent.isEmpty()) {
-                ToastUtil.show(this, "解决办法不能为空")
-                return@setOnClickListener
-            }
+            showDialog("正在添加日报记录...")
 
-            var checkContent = edt_check.text.toString().trim()
-//            if (checkContent.isEmpty()) {
-//                ToastUtil.show(this, "质量自检不能为空")
-//                return@setOnClickListener
-//            }
-
-
-            showDialog("正在添加记录...")
-
-            var report = Report()
-            report.check = checkContent
-            report.method = methodContent
-            report.question = questionContent
-            report.worktoday = workContent
+            var report = DailyReport()
             report.uid = userInfo.objectId
-            report.pid = project.objectId
-            report.type = type
+            if (project != null) {
+                report.pid = project?.objectId
+            }
+            report.title = title
+            report.check = checkId
+            report.content = content
 
             if (mLocation != null) {
                 report.address = mLocation?.address
@@ -132,42 +125,61 @@ class AddReportActivity : BaseActivity() {
                     if (e == null) {
                         uploadImg(objectId.toString())
                     } else {
-                        ToastUtil.show(this@AddReportActivity, "添加失败")
+                        ToastUtil.show(this@UpdateDailyReportActivity, "添加失败")
                     }
                 }
             })
         }
+
     }
 
     override fun initData() {
         userInfo = SharedPreferencesUtils.loadLogin(this)
 
-        mLocation = ProjectData.getInstance().location
-        locationTv.text = mLocation?.address
-
-        project = intent.getSerializableExtra("project") as Project
-        type = intent.getIntExtra("type", 0)
-        when (type) {
-            1 -> {
-                title_tv_title.text = "添加日报"
-                tv_work.text = "今日工作"
-                edt_work.hint = "请输入今日的工作内容"
-            }
-            2 -> {
-                title_tv_title.text = "添加周报"
-                tv_work.text = "本周工作"
-                edt_work.hint = "请输入本周的工作内容"
-                ll_location.visibility = View.GONE
-            }
-            3 -> {
-                title_tv_title.text = "添加月报"
-                tv_work.text = "本月工作"
-                edt_work.hint = "请输入本月的工作内容"
-                ll_location.visibility = View.GONE
-            }
+        if (intent.hasExtra("project")) {
+            project = intent.getSerializableExtra("project") as Project
         }
 
-        nameTv.text = project.name
+        mLocation = ProjectData.getInstance().location
+
+        if (intent.hasExtra("code")) {
+            val resultCode = intent.getIntExtra("code", 0)
+            initIntent(resultCode, intent)
+        }
+    }
+
+    fun initIntent(resultCode: Int, data: Intent) {
+        if (resultCode == 101) {
+            var path = data.getStringExtra("path");
+            var localMedia = LocalMedia()
+            localMedia.path = path
+            localMedia.mimeType = PictureMimeType.ofImage()
+            localMedia.pictureType = "image/jpeg"
+            selectList.add(localMedia)
+            adapter.setList(selectList)
+            adapter.notifyDataSetChanged()
+        } else if (resultCode == 102) {
+            var path = data.getStringExtra("path");
+            var url = data.getStringExtra("url");
+            var localMedia = LocalMedia()
+            localMedia.path = url
+            localMedia.mimeType = PictureMimeType.ofVideo()
+            // 获取时长
+            var mediaPlayer = MediaPlayer();
+            mediaPlayer.setDataSource(url);
+            mediaPlayer.prepare();
+            localMedia.duration = mediaPlayer.getDuration().toLong() + 1000
+            localMedia.pictureType = "video/mp4"
+            localMedia.cutPath = path
+            localMedia.isCut = true
+            selectList.add(localMedia)
+            adapter.setList(selectList)
+            adapter.notifyDataSetChanged()
+            mediaPlayer.release()
+
+        } else if (resultCode == 103) {
+            Toast.makeText(this, "请检查相机权限~", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private fun uploadImg(objectId: String) {
@@ -188,13 +200,13 @@ class AddReportActivity : BaseActivity() {
                                 override fun done(objectId: String?, e: BmobException?) {
                                     if (e == null) {
                                     } else {
-                                        ToastUtil.show(this@AddReportActivity, "文件保存失败：" + e.toString())
+                                        ToastUtil.show(this@UpdateDailyReportActivity, "文件保存失败：" + e.toString())
                                     }
                                     uploadImg(objectId.toString())
                                 }
                             });
                         } else {
-                            ToastUtil.show(this@AddReportActivity, "文件上传失败：" + e.toString())
+                            ToastUtil.show(this@UpdateDailyReportActivity, "文件上传失败：" + e.toString())
                         }
                     }
                 });
@@ -210,7 +222,6 @@ class AddReportActivity : BaseActivity() {
             }, 1500)
         }
     }
-
 
     /**
      * 获取权限
@@ -239,38 +250,7 @@ class AddReportActivity : BaseActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == 101) {
-            Log.i("CJT", "picture");
-            var path = data?.getStringExtra("path");
-            var localMedia = LocalMedia()
-            localMedia.path = path
-            localMedia.mimeType = PictureMimeType.ofImage()
-            localMedia.pictureType = "image/jpeg"
-            selectList.add(localMedia)
-            adapter.setList(selectList)
-            adapter.notifyDataSetChanged()
-        } else if (resultCode == 102) {
-            Log.i("CJT", "video");
-            var path = data?.getStringExtra("path");
-            var url = data?.getStringExtra("url");
-            var localMedia = LocalMedia()
-            localMedia.path = url
-            localMedia.mimeType = PictureMimeType.ofVideo()
-            // 获取时长
-            var mediaPlayer = MediaPlayer();
-            mediaPlayer.setDataSource(url);
-            mediaPlayer.prepare();
-            localMedia.duration = mediaPlayer.getDuration().toLong() + 1000
-            localMedia.pictureType = "video/mp4"
-            localMedia.cutPath = path
-            localMedia.isCut = true
-            selectList.add(localMedia)
-            adapter.setList(selectList)
-            adapter.notifyDataSetChanged()
-            mediaPlayer.release()
-        } else if (resultCode == 103) {
-            Toast.makeText(this, "请检查相机权限~", Toast.LENGTH_SHORT).show();
-        }
+        initIntent(resultCode, data!!)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -304,5 +284,4 @@ class AddReportActivity : BaseActivity() {
             }
         }
     }
-
 }

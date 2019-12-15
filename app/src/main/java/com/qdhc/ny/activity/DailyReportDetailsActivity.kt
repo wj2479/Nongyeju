@@ -13,30 +13,30 @@ import com.qdhc.ny.R
 import com.qdhc.ny.adapter.ImageAdapter
 import com.qdhc.ny.base.BaseActivity
 import com.qdhc.ny.bmob.ContradictPic
-import com.qdhc.ny.bmob.Project
-import com.qdhc.ny.bmob.Report
-import com.qdhc.ny.common.Constant
+import com.qdhc.ny.bmob.DailyReport
 import com.qdhc.ny.utils.SharedPreferencesUtils
 import com.qdhc.ny.utils.UserInfoUtils
 import com.sj.core.utils.ToastUtil
-import kotlinx.android.synthetic.main.activity_report_details.*
+import kotlinx.android.synthetic.main.activity_daily_report_details.*
 import kotlinx.android.synthetic.main.layout_title_theme.*
 
 
 /**
  * 日志详情
  */
-class ReportDetailsActivity : BaseActivity() {
+class DailyReportDetailsActivity : BaseActivity() {
 
     lateinit var adapter: ImageAdapter
 
     var selectList = ArrayList<ContradictPic>()
 
     override fun intiLayout(): Int {
-        return R.layout.activity_report_details
+        return R.layout.activity_daily_report_details
     }
 
     override fun initView() {
+        title_tv_title.text = "日报详情"
+
         rlv.isNestedScrollingEnabled = false
         rlv.layoutManager = GridLayoutManager(this, 4) as RecyclerView.LayoutManager?
         adapter = ImageAdapter(this, selectList)
@@ -44,7 +44,7 @@ class ReportDetailsActivity : BaseActivity() {
             var url = selectList.get(position).file.url
 
             if (url.endsWith("mp4", true)) {
-                PictureSelector.create(this@ReportDetailsActivity).externalPictureVideo(url);
+                PictureSelector.create(this@DailyReportDetailsActivity).externalPictureVideo(url);
             } else {
                 var intent = Intent(this, ImageActivity::class.java)
                 intent.putExtra("url", url)
@@ -59,24 +59,19 @@ class ReportDetailsActivity : BaseActivity() {
     }
 
     override fun initData() {
-        var project = intent.getSerializableExtra("project") as Project
 
-        var report = intent.getSerializableExtra("report") as Report
-        var type = report.type
+        var report = intent.getSerializableExtra("report") as DailyReport
 
-        when (type) {
-            Constant.REPORT_TYPE_DAY -> title_tv_title.text = "日报详情"
-            Constant.REPORT_TYPE_WEEK -> title_tv_title.text = "周报详情"
-            Constant.REPORT_TYPE_MONTH -> title_tv_title.text = "月报详情"
-        }
-
-        nameTv.text = project.name
+        nameTv.text = report.title
         locationTv.text = report.address
         timeTv.text = report.createdAt
-        edt_work.text = report.worktoday
-        edt_question.text = report.question
-        edt_method.text = report.method
-        edt_check.text = report.check
+        contentTv.text = report.content
+
+        when (report.check) {
+            0 -> checkTv.text = "合格"
+            1 -> checkTv.text = "一般"
+            2 -> checkTv.text = "不合格"
+        }
 
         var userInfo = SharedPreferencesUtils.loadLogin(this)
 
@@ -96,7 +91,7 @@ class ReportDetailsActivity : BaseActivity() {
         getImags(report)
     }
 
-    fun getImags(report: Report) {
+    fun getImags(report: DailyReport) {
         if (report == null || report.objectId == null) {
             photoLayout.visibility = View.GONE
             return
@@ -157,7 +152,7 @@ class ReportDetailsActivity : BaseActivity() {
                     }
                 } else {
                     Log.e("TAG", "获取照片失败:->" + e.toString())
-                    ToastUtil.show(this@ReportDetailsActivity, "获取照片失败")
+                    ToastUtil.show(this@DailyReportDetailsActivity, "获取照片失败")
                     photoLayout.visibility = View.GONE
                 }
             }
