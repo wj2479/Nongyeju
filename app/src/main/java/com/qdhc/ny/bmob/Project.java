@@ -1,7 +1,6 @@
 package com.qdhc.ny.bmob;
 
 import java.io.Serializable;
-import java.util.List;
 
 import cn.bmob.v3.BmobObject;
 
@@ -44,24 +43,9 @@ public class Project extends BmobObject implements Serializable {
     String village;
 
     /**
-     * 项目的进度记录
+     * 项目总进度
      */
-    List<ProjSchedule> schedules = null;
-
-    /**
-     * 项目的日报记录
-     */
-    List<Report> dayRreports = null;
-
-    /**
-     * 项目的周报记录
-     */
-    List<Report> weekRreports = null;
-
-    /**
-     * 项目的月报记录
-     */
-    List<Report> monthRreports = null;
+    int schedule = 0;
 
     public String getName() {
         return name;
@@ -85,38 +69,6 @@ public class Project extends BmobObject implements Serializable {
 
     public void setManager(String manager) {
         this.manager = manager;
-    }
-
-    public List<ProjSchedule> getSchedules() {
-        return schedules;
-    }
-
-    public void setSchedules(List<ProjSchedule> schedules) {
-        this.schedules = schedules;
-    }
-
-    public List<Report> getDayRreports() {
-        return dayRreports;
-    }
-
-    public void setDayRreports(List<Report> dayRreports) {
-        this.dayRreports = dayRreports;
-    }
-
-    public List<Report> getWeekRreports() {
-        return weekRreports;
-    }
-
-    public void setWeekRreports(List<Report> weekRreports) {
-        this.weekRreports = weekRreports;
-    }
-
-    public List<Report> getMonthRreports() {
-        return monthRreports;
-    }
-
-    public void setMonthRreports(List<Report> monthRreports) {
-        this.monthRreports = monthRreports;
     }
 
     public String getTags() {
@@ -143,6 +95,14 @@ public class Project extends BmobObject implements Serializable {
         this.area = area;
     }
 
+    public int getSchedule() {
+        return schedule;
+    }
+
+    public void setSchedule(int schedule) {
+        this.schedule = schedule;
+    }
+
     @Override
     public String toString() {
         return "Project{" +
@@ -150,11 +110,9 @@ public class Project extends BmobObject implements Serializable {
                 ", introduce='" + introduce + '\'' +
                 ", manager='" + manager + '\'' +
                 ", tags='" + tags + '\'' +
-                ", village=" + village +
-                ", schedules=" + schedules +
-                ", dayRreports=" + dayRreports +
-                ", weekRreports=" + weekRreports +
-                ", monthRreports=" + monthRreports +
+                ", area=" + area +
+                ", village='" + village + '\'' +
+                ", schedule=" + schedule +
                 '}';
     }
 }

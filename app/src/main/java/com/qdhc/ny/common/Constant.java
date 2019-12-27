@@ -19,13 +19,8 @@ public class Constant {
 
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    public static final String SYS_ROOT = "http://oa.cunlintao.com/"; //线上版本地址
+    public static final String SYS_ROOT = "http://ade.tendency.vip:8000/"; //线上版本地址
 
-    //微信支付appid
-    public static final String APPID_WEIXIN = "wx35b44d6799638598";
-    public static final int REALM_VERSION = 0;
-    public static final String REALM_NAME = "yc";
-    public static final String SP_NAME = "yc";
     public static final String ExternalStorageDirectory =
             Environment.getExternalStorageDirectory().getAbsolutePath() + "/";
 

@@ -5,18 +5,21 @@ import android.content.Intent
 import android.os.CountDownTimer
 import android.support.v7.app.AlertDialog
 import android.util.Log
-import cn.bmob.v3.BmobQuery
 import cn.bmob.v3.exception.BmobException
-import cn.bmob.v3.listener.FindListener
 import cn.bmob.v3.listener.SaveListener
+import com.google.gson.reflect.TypeToken
 import com.qdhc.ny.base.BaseActivity
 import com.qdhc.ny.bmob.UserInfo
 import com.qdhc.ny.utils.BaseUtil
 import com.qdhc.ny.utils.SharedPreferencesUtils
+import com.sj.core.net.Rx.RxRestClient
 import com.sj.core.utils.SharedPreferencesUtil
 import com.sj.core.utils.ToastUtil
 import com.tencent.bugly.crashreport.CrashReport
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_login.*
+import org.json.JSONObject
 
 
 /**
@@ -29,7 +32,10 @@ class LoginActivity : BaseActivity() {
 
     private var timer: CountDownTimer? = null
     override fun initView() {
-        et_username.setText(SharedPreferencesUtil.get(this, "usr"))
+        val savedUsername = SharedPreferencesUtil.get(this, "usr")
+        if (savedUsername.isNotEmpty()) {
+            et_username.setText(savedUsername)
+        }
 
         timer = object : CountDownTimer(60000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
@@ -85,7 +91,30 @@ class LoginActivity : BaseActivity() {
     }
 
     override fun initData() {
+//        getData()
     }
+
+    fun getData() {
+        var jsonObj = JSONObject()
+        jsonObj.put("CommandType", "0000")
+        jsonObj.put("SQL", "select * from table_user")
+
+        RxRestClient.create()
+                .url("XIHE")
+                .raw(jsonObj.toString())
+                .build()
+                .postRaw()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        { result ->
+                            Log.e("TAG", "登录成功:" + result)
+                        },
+                        { throwable ->
+                            Log.e("TAG", "登录失败:" + throwable.toString())
+                        })
+    }
+
 
     lateinit var alertDialog2: AlertDialog
 
@@ -101,33 +130,6 @@ class LoginActivity : BaseActivity() {
                 })
         alertDialog2 = alertBuilder.create()
         alertDialog2.show()
-    }
-
-
-    //登录
-    fun loginByPhone(moblie: String, code: String) {
-        var query = BmobQuery<UserInfo>()
-
-        query.addWhereEqualTo("mobilePhoneNumber", moblie)
-        query.addWhereEqualTo("password", code)
-        query.findObjects(object : FindListener<UserInfo>() {
-            override fun done(list: List<UserInfo>?, e: BmobException?) {
-                dismissDialogNow()
-                if (e == null) {
-                    if (list!!.size > 0) {
-                        var user = list.get(0)
-                        Log.e("TAG", "登录成功:" + user)
-                        onLoginSuccess(user, code)
-                        finish()
-                    } else {
-                        ToastUtil.show(mContext, "登录失败,请检查您的输入是否正确")
-                    }
-                } else {
-                    ToastUtil.show(mContext, "登录失败")
-                }
-                bt_login.isEnabled = true
-            }
-        })
     }
 
     fun loginByUserName(username: String, password: String) {
@@ -147,6 +149,42 @@ class LoginActivity : BaseActivity() {
                 bt_login.isEnabled = true
             }
         })
+    }
+
+    fun loginByUserName22(username: String, password: String) {
+        var jsonObj = JSONObject()
+        jsonObj.put("CommandType", "0000")
+        jsonObj.put("SQL", "select * from _user where username='" + username + "' and password = '" + password + "'")
+
+        RxRestClient.create()
+                .url("XIHE")
+                .raw(jsonObj.toString())
+                .build()
+                .postRaw()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        { result ->
+                            Log.e("TAG", "登录成功:" + result)
+                            if (result.isNullOrEmpty() || result.equals(" -1")) {
+                                ToastUtil.show(mContext, "登录失败,请检查您的输入是否正确")
+                            } else {
+                                val list: List<UserInfo> = gson.fromJson(result, object : TypeToken<List<UserInfo>>() {}.getType())
+                                if (list.size == 1) {
+                                    onLoginSuccess(list[0], password)
+                                } else {
+                                    ToastUtil.show(mContext, "登录失败,请联系管理员")
+                                }
+                            }
+                            dismissDialogNow()
+                            bt_login.isEnabled = true
+                        },
+                        { throwable ->
+                            throwable.printStackTrace()
+                            ToastUtil.show(mContext, "登录失败,请检查您的网络")
+                            dismissDialogNow()
+                            bt_login.isEnabled = true
+                        })
     }
 
     fun onLoginSuccess(user: UserInfo, pwd: String) {

@@ -8,6 +8,7 @@ import java.io.File;
 import java.util.HashMap;
 
 import io.reactivex.Observable;
+import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -60,12 +61,17 @@ public class RxRestClient {
                         "file", FILE.getName(), requestBody);
                 observable = service.upload(URL, body);
                 break;
+            case POST_RAW:
+                observable = service.postRaw(URL, BODY);
+                break;
+            case PUT_RAW:
+                observable = service.putRaw(URL, BODY);
+                break;
             default:
                 break;
         }
         return observable;
     }
-
 
 
     //各种请求
@@ -89,10 +95,19 @@ public class RxRestClient {
         return request(HttpMethod.UPLOAD);
     }
 
-    public final Observable<ResponseBody> download() {
-        return RestCreator.getRxRestService().download(URL,PARAMS);
+    public final Observable<String> uploadWithHeader(String header) {
+        RxRestService service = RestCreator.getRxRestService();
+        RequestBody body = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"), FILE);
+        return service.upload(URL, header, body);
     }
 
+    public final Observable<ResponseBody> download() {
+        return RestCreator.getRxRestService().download(URL, PARAMS);
+    }
+
+    public final Observable<String> postRaw() {
+        return request(HttpMethod.POST_RAW);
+    }
 }
 
 

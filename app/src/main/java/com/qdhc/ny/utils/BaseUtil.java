@@ -32,6 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
@@ -51,6 +52,25 @@ public class BaseUtil {
     private static double EARTH_RADIUS = 6378.137;// 地球半径
     private static long lastClickTime;
 
+    private static String[] charArray = new String[]{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+            "q", "w", "e", "r", "t", "y", "u", "i", "o", "p",
+            "a", "s", "d", "f", "g", "h", "j", "k", "l",
+            "z", "x", "c", "v", "b", "n", "m"};
+
+    /**
+     * 获取随机的字符串+数字
+     *
+     * @param length
+     * @return
+     */
+    public static String getRandomStr(int length) {
+        StringBuilder sb = new StringBuilder();
+        Random random = new Random();
+        while (sb.length() < length) {
+            sb.append(charArray[random.nextInt(charArray.length)]);
+        }
+        return sb.toString();
+    }
 
     public static String sHA1(Context context) {
         try {
@@ -69,7 +89,7 @@ public class BaseUtil {
                 hexString.append(":");
             }
             String result = hexString.toString();
-            return result.substring(0, result.length()-1);
+            return result.substring(0, result.length() - 1);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         } catch (NoSuchAlgorithmException e) {
@@ -629,9 +649,10 @@ public class BaseUtil {
         SharedPreferences preferences = context.getSharedPreferences("portrait", Context.MODE_PRIVATE);
         return preferences.getString("url", "").equals(url);
     }
+
     // 隐藏键盘
     public static void hideInput(Activity context) {
-        if (context!= null && context.getCurrentFocus() != null
+        if (context != null && context.getCurrentFocus() != null
                 && context.getCurrentFocus().getWindowToken() != null) {
             ((InputMethodManager) context.getSystemService(
                     Context.INPUT_METHOD_SERVICE))
@@ -639,13 +660,15 @@ public class BaseUtil {
                             .getApplicationWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
+
     // 显示键盘
     public static void showInput(Activity context) {
-        InputMethodManager inputMethodManager = (InputMethodManager)context
+        InputMethodManager inputMethodManager = (InputMethodManager) context
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.toggleSoftInput(0,
                 InputMethodManager.HIDE_NOT_ALWAYS);
     }
+
     /**
      * 模拟点击view
      *
@@ -825,6 +848,7 @@ public class BaseUtil {
     public interface OnCodeResult {
         void done(Bitmap bitmap);
     }
+
     /**
      * 获取当前版本号(注意此处获取的为3位服务器版本号)
      *
@@ -844,11 +868,13 @@ public class BaseUtil {
         }
         return version;
     }
+
     public static final String getAppVersionName(Context context) throws PackageManager.NameNotFoundException {
         PackageManager pm = context.getPackageManager();
         PackageInfo pi = pm.getPackageInfo(context.getPackageName(), 0);
         return pi.versionName;
     }
+
     /**
      * 比较app版本是否需要升级
      *
@@ -857,7 +883,7 @@ public class BaseUtil {
      * @return
      */
     public static boolean isNeedUpDate(String current, String service) {
-        if (current==null || service==null||current.isEmpty()||service.isEmpty())
+        if (current == null || service == null || current.isEmpty() || service.isEmpty())
             return false;
 
         String[] c = current.split("\\."); // 2.2.3

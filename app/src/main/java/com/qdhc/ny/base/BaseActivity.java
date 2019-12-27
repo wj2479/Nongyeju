@@ -12,6 +12,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
+import com.google.gson.Gson;
 import com.qdhc.ny.R;
 import com.sj.core.utils.AcitityManagerUtil;
 import com.zyao89.view.zloading.ZLoadingDialog;
@@ -28,6 +29,8 @@ import org.greenrobot.eventbus.Subscribe;
 public abstract class BaseActivity extends FragmentActivity {
     protected Activity mContext;
     protected ZLoadingDialog mDialog;
+
+    protected Gson gson = new Gson();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -13,12 +13,9 @@ import com.qdhc.ny.bmob.Project;
 import com.qdhc.ny.bmob.Report;
 import com.qdhc.ny.common.Constant;
 
-import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
-import static com.bigkoo.pickerview.view.WheelTime.dateFormat;
 
 /**
  * @Author wj
@@ -60,14 +57,14 @@ public class ReportExpandAdapter extends BaseExpandableListAdapter {
         int count = 0;
         switch (type) {
             case Constant.REPORT_TYPE_DAY:
-                count = projects.get(groupPosition).getDayRreports().size();
+//                count = projects.get(groupPosition).getDayRreports().size();
 //                count = Math.min(count, MAX_CHILD_COUNT);
                 break;
             case Constant.REPORT_TYPE_WEEK:
-                count = projects.get(groupPosition).getWeekRreports().size();
+//                count = projects.get(groupPosition).getWeekRreports().size();
                 break;
             case Constant.REPORT_TYPE_MONTH:
-                count = projects.get(groupPosition).getMonthRreports().size();
+//                count = projects.get(groupPosition).getMonthRreports().size();
                 break;
             default:
         }
@@ -84,13 +81,13 @@ public class ReportExpandAdapter extends BaseExpandableListAdapter {
         Report report = null;
         switch (type) {
             case Constant.REPORT_TYPE_DAY:
-                report = projects.get(groupPosition).getDayRreports().get(childPosition);
+//                report = projects.get(groupPosition).getDayRreports().get(childPosition);
                 break;
             case Constant.REPORT_TYPE_WEEK:
-                report = projects.get(groupPosition).getWeekRreports().get(childPosition);
+//                report = projects.get(groupPosition).getWeekRreports().get(childPosition);
                 break;
             case Constant.REPORT_TYPE_MONTH:
-                report = projects.get(groupPosition).getMonthRreports().get(childPosition);
+//                report = projects.get(groupPosition).getMonthRreports().get(childPosition);
                 break;
             default:
         }
@@ -170,34 +167,34 @@ public class ReportExpandAdapter extends BaseExpandableListAdapter {
         Calendar calendar = Calendar.getInstance();
         calendar.setFirstDayOfWeek(Calendar.MONDAY);
 
-        switch (type) {
-            case Constant.REPORT_TYPE_DAY:
-                report = projects.get(groupPosition).getDayRreports().get(childPosition);
-                String dayTime = report.getCreatedAt().substring(0, 10);
-                childViewHolder.childTextView.setText("日报 :  " + dayTime);
-                break;
-            case Constant.REPORT_TYPE_WEEK:
-                report = projects.get(groupPosition).getWeekRreports().get(childPosition);
-                try {
-                    date = dateFormat.parse(report.getCreatedAt());
-                } catch (ParseException e) {
-                }
-                calendar.setTime(date);
-
-                childViewHolder.childTextView.setText("周报 :  " + (calendar.get(Calendar.MONTH) + 1) + "月  第" + calendar.get(Calendar.WEEK_OF_MONTH) + "周");
-                break;
-            case Constant.REPORT_TYPE_MONTH:
-                report = projects.get(groupPosition).getMonthRreports().get(childPosition);
-                try {
-                    date = dateFormat.parse(report.getCreatedAt());
-                } catch (ParseException e) {
-                }
-                calendar.setTime(date);
-
-                childViewHolder.childTextView.setText("月报 :  " + calendar.get(Calendar.YEAR) + "年" + (calendar.get(Calendar.MONTH) + 1) + "月");
-                break;
-            default:
-        }
+//        switch (type) {
+//            case Constant.REPORT_TYPE_DAY:
+//                report = projects.get(groupPosition).getDayRreports().get(childPosition);
+//                String dayTime = report.getCreatedAt().substring(0, 10);
+//                childViewHolder.childTextView.setText("日报 :  " + dayTime);
+//                break;
+//            case Constant.REPORT_TYPE_WEEK:
+//                report = projects.get(groupPosition).getWeekRreports().get(childPosition);
+//                try {
+//                    date = dateFormat.parse(report.getCreatedAt());
+//                } catch (ParseException e) {
+//                }
+//                calendar.setTime(date);
+//
+//                childViewHolder.childTextView.setText("周报 :  " + (calendar.get(Calendar.MONTH) + 1) + "月  第" + calendar.get(Calendar.WEEK_OF_MONTH) + "周");
+//                break;
+//            case Constant.REPORT_TYPE_MONTH:
+//                report = projects.get(groupPosition).getMonthRreports().get(childPosition);
+//                try {
+//                    date = dateFormat.parse(report.getCreatedAt());
+//                } catch (ParseException e) {
+//                }
+//                calendar.setTime(date);
+//
+//                childViewHolder.childTextView.setText("月报 :  " + calendar.get(Calendar.YEAR) + "年" + (calendar.get(Calendar.MONTH) + 1) + "月");
+//                break;
+//            default:
+//        }
 
         return convertView;
     }

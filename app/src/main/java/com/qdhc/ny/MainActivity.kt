@@ -36,7 +36,6 @@ import com.google.gson.Gson
 import com.luck.picture.lib.permissions.RxPermissions
 import com.qdhc.ny.activity.CameraActivity
 import com.qdhc.ny.activity.NotifyDetailActivity
-import com.qdhc.ny.activity.UpdateDailyReportActivity
 import com.qdhc.ny.adapter.TabFragmentPagerAdapter
 import com.qdhc.ny.base.BaseActivity
 import com.qdhc.ny.base.BaseApplication
@@ -45,8 +44,7 @@ import com.qdhc.ny.bmob.*
 import com.qdhc.ny.common.Constant
 import com.qdhc.ny.common.ProjectData
 import com.qdhc.ny.eventbus.ProjectEvent
-import com.qdhc.ny.fragment.CheckFragment
-import com.qdhc.ny.fragment.ContradictionListFragment
+import com.qdhc.ny.fragment.JianliFragment
 import com.qdhc.ny.fragment.MyFragment
 import com.qdhc.ny.fragment.NotifyFragment
 import com.qdhc.ny.service.UpadateManager
@@ -118,13 +116,9 @@ class MainActivity : BaseActivity() {
     //UI
     private val mTabEntities = ArrayList<CustomTabEntity>()
     private val mIconUnselectIds = intArrayOf(R.drawable.ic_list,
-            R.drawable.ic_schedule,
-            R.drawable.ic_upload,
             R.drawable.ic_message,
             R.drawable.ic_my)
     private val mIconSelectIds = intArrayOf(R.drawable.ic_list_select,
-            R.drawable.ic_schedule_select,
-            R.drawable.ic_upload,
             R.drawable.ic_message_select,
             R.drawable.ic_my_select)
 
@@ -137,9 +131,7 @@ class MainActivity : BaseActivity() {
         var tabTitle = resources.getStringArray(R.array.tab_titles)
         //将fragment装进列表中
         var fragmentList = ArrayList<Fragment>()
-        fragmentList.add(ContradictionListFragment(userInfo.areaId, userInfo.district, true))
-        fragmentList.add(CheckFragment())
-        fragmentList.add(MyFragment())
+        fragmentList.add(JianliFragment())
         fragmentList.add(NotifyFragment())
         fragmentList.add(MyFragment())
         //viewpager加载adapter
@@ -251,32 +243,32 @@ class MainActivity : BaseActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         Log.e("TAG", "onActivityResult--> " + resultCode)
 
-        if (resultCode == 101 || resultCode == 102) {
-            val intent = Intent(data)
-            intent.setClass(this@MainActivity, UpdateDailyReportActivity::class.java);
-            intent.putExtra("code", resultCode)
-            intent.putExtra("project", projectList.get(0))
-            startActivity(intent)
-        } else if (resultCode == 103) {
-            Toast.makeText(this, "请检查相机权限~", Toast.LENGTH_SHORT).show();
-        }
+//        if (resultCode == 101 || resultCode == 102) {
+//            val intent = Intent(data)
+//            intent.setClass(this@MainActivity, UpdateDailyReportActivity::class.java);
+//            intent.putExtra("code", resultCode)
+//            intent.putExtra("project", projectList.get(0))
+//            startActivity(intent)
+//        } else if (resultCode == 103) {
+//            Toast.makeText(this, "请检查相机权限~", Toast.LENGTH_SHORT).show();
+//        }
 
     }
 
     private fun initPager() {
         tl.setOnTabSelectListener(object : OnTabSelectListener {
             override fun onTabSelect(position: Int) {
-                if (position == 2) {
-//                    startActivityForResult(Intent(this@MainActivity, SignInActivity::class.java), 1)
-                    if (projectList.size > 0) {
-                        getPermissions()
-                    } else {
-                        ToastUtil.show(this@MainActivity, "您还没有负责的项目")
-                    }
-                } else {
-                    vp.currentItem = position
-                    tab_position = position
-                }
+//                if (position == 2) {
+////                    startActivityForResult(Intent(this@MainActivity, SignInActivity::class.java), 1)
+//                    if (projectList.size > 0) {
+//                        getPermissions()
+//                    } else {
+//                        ToastUtil.show(this@MainActivity, "您还没有负责的项目")
+//                    }
+//                } else {
+                vp.currentItem = position
+                tab_position = position
+//                }
             }
 
             override fun onTabReselect(position: Int) {
@@ -372,7 +364,6 @@ class MainActivity : BaseActivity() {
         if (null != locationClient) {
             locationClient.disableBackgroundLocation(true)
         }
-        projectList.clear()
         getProjectData()
     }
 
@@ -389,12 +380,13 @@ class MainActivity : BaseActivity() {
                 object : FindListener<Project>() {
                     override fun done(list: List<Project>?, e: BmobException?) {
                         if (e == null) {
+                            projectList.clear()
                             projectList.addAll(list!!)
-                            maxCount = projectList.size * 2
+                            maxCount = projectList.size
                             count = 0
                             projectList.forEach { project ->
                                 getSchedule(project)
-                                getReports(project)
+//                                getReports(project)
                             }
                         } else {
                             Log.e("异常-----》", e.toString())
@@ -414,7 +406,10 @@ class MainActivity : BaseActivity() {
         categoryBmobQuery.findObjects(object : FindListener<ProjSchedule>() {
             override fun done(list: MutableList<ProjSchedule>?, e: BmobException?) {
                 if (e == null) {
-                    project.schedules = list
+                    if (list != null && list.size > 0) {
+                        var progress = Math.max(project.schedule, list[0].schedule)
+                        project.schedule = progress
+                    }
                 }
                 // 每完成一次  计数+1
                 count++
@@ -446,9 +441,9 @@ class MainActivity : BaseActivity() {
                                 3 -> monthList.add(report)
                             }
                         }
-                        project.dayRreports = dayList
-                        project.weekRreports = weekList
-                        project.monthRreports = monthList
+//                        project.dayRreports = dayList
+//                        project.weekRreports = weekList
+//                        project.monthRreports = monthList
                     }
                 }
                 // 每完成一次  计数+1

@@ -3,8 +3,6 @@
     <!--底部按钮-->
     <string-array name="tab_titles">
         <item>工程</item>
-        <item>考核</item>
-        <item>拍照</item>
         <item>通知</item>
         <item>个人</item>
     </string-array>
@@ -37,6 +35,17 @@
         <item>日  报</item>
         <item>周  报</item>
         <item>月  报</item>
+    </string-array>
+
+    <string-array name="daily_report_types">
+        <item>管 沟</item>
+        <item>塘 坝</item>
+        <item>井 类</item>
+        <item>道 路</item>
+        <item>林 网</item>
+        <item>电 泵</item>
+        <item>整 地</item>
+        <item>其 他</item>
     </string-array>
 
     <!--信息来源-->

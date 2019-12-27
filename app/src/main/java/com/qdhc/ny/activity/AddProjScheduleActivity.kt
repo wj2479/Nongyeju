@@ -187,10 +187,8 @@ class AddProjScheduleActivity : BaseActivity() {
         project = intent.getSerializableExtra("project") as Project
 
         nameTv.setText(project.name)
-        try {
-            initSchedule = project.schedules.get(0).schedule.toFloat()
-        } catch (e: Exception) {
-        }
+
+        initSchedule = project.schedule * 1.0f
 
         bubbleSeekbar.setProgress(initSchedule)
 

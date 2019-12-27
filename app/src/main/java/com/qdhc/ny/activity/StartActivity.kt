@@ -27,6 +27,10 @@ class StartActivity : BaseActivity() {
 
     override fun initView() {
         getHasVillages()
+
+//        for (index in 1..50) {
+//            println(BaseUtil.getRandomStr(8))
+//        }
     }
 
     private fun init() {
@@ -40,35 +44,6 @@ class StartActivity : BaseActivity() {
         }
     }
 
-    fun loginByPhone(moblie: String, code: String) {
-        var query = BmobQuery<UserInfo>()
-
-        query.addWhereEqualTo("mobilePhoneNumber", moblie)
-        query.addWhereEqualTo("password", code)
-        query.findObjects(object : FindListener<UserInfo>() {
-            override fun done(list: List<UserInfo>?, e: BmobException?) {
-                if (e == null) {
-                    if (list!!.size > 0) {
-                        var user = list.get(0)
-                        Log.e("TAG", "自动登录成功:" + Gson().toJson(user))
-                        SharedPreferencesUtils.saveLogin(mContext, user)
-
-                        when (user.role) {
-                            1 -> startActivity(Intent(mContext, MainActivity::class.java))
-                            2 -> startActivity(Intent(mContext, Main4Activity::class.java))
-                            3 -> startActivity(Intent(mContext, Main2Activity::class.java))
-                            4 -> startActivity(Intent(mContext, Main4Activity::class.java))
-                        }
-                    } else {
-                        startActivity(Intent(mContext, LoginActivity::class.java))
-                    }
-                } else {
-                    startActivity(Intent(mContext, LoginActivity::class.java))
-                }
-                finish()
-            }
-        })
-    }
 
     /**
      * 获取村落列表

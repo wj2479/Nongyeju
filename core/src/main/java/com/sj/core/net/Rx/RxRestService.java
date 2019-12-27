@@ -12,6 +12,8 @@ import retrofit2.http.DELETE;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -49,8 +51,12 @@ public interface RxRestService {
     @POST
     Observable<String> upload(@Url String url, @Part MultipartBody.Part file);
 
+    @POST
+    Observable<String> upload(@Url String url, @Header("Content-Type") String header, @Body RequestBody file);
+
     //原始数据
     @POST
+    @Headers("Content-Type: application/json")
     Observable<String> postRaw(@Url String url, @Body RequestBody body);
 
     @PUT

@@ -19,9 +19,9 @@
     <FrameLayout
         android:id="@+id/fl"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_60"
+        android:layout_height="@dimen/dp_48"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/wb_tab_bg">
+        android:background="#F8F8F8">
 
         <com.flyco.tablayout.CommonTabLayout
             android:id="@+id/tl"
@@ -44,7 +44,8 @@
             android:layout_height="@dimen/dp_36"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/dp_4"
-            android:src="@drawable/ic_camera" />
+            android:src="@drawable/ic_camera"
+            android:visibility="gone" />
     </FrameLayout>
 
 </RelativeLayout>

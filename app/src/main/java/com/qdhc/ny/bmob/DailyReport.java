@@ -36,6 +36,11 @@ public class DailyReport extends BmobObject {
     int check = -1;
 
     /**
+     * 更新的进度
+     */
+    int schedule = 0;
+
+    /**
      * 上传地址
      */
     String address = "";
@@ -110,5 +115,13 @@ public class DailyReport extends BmobObject {
 
     public void setDistrict(String district) {
         this.district = district;
+    }
+
+    public int getSchedule() {
+        return schedule;
+    }
+
+    public void setSchedule(int schedule) {
+        this.schedule = schedule;
     }
 }

@@ -104,11 +104,6 @@ class ContradictionListFragment(areaId: Int, villageId: String, isShowTitle: Boo
         emptyView.findViewById<TextView>(com.qdhc.ny.R.id.tv_empty).text = "暂无进度数据"
         //添加空视图
         mAdapter.emptyView = emptyView
-    }
-
-    override fun onResume() {
-        super.onResume()
-        projectList.clear()
         getProjectData()
     }
 
@@ -139,7 +134,9 @@ class ContradictionListFragment(areaId: Int, villageId: String, isShowTitle: Boo
                     override fun done(list: List<Project>?, e: BmobException?) {
                         if (e == null) {
                             Log.e("工程列表结果-----》", list?.toString())
+                            projectList.clear()
                             projectList.addAll(list!!)
+
                             maxCount = projectList.size
                             count = 0
                             projectList.forEach { project ->
@@ -162,7 +159,10 @@ class ContradictionListFragment(areaId: Int, villageId: String, isShowTitle: Boo
         categoryBmobQuery.findObjects(object : FindListener<ProjSchedule>() {
             override fun done(list: MutableList<ProjSchedule>?, e: BmobException?) {
                 if (e == null) {
-                    project.schedules = list
+                    if (list != null && list.size > 0) {
+                        var progress = Math.max(project.schedule, list[0].schedule)
+                        project.schedule = progress
+                    }
                 }
                 // 每完成一次  计数+1
                 count++

@@ -66,7 +66,7 @@ class AddProjectActivity : BaseActivity() {
             }
 
             override fun onBeyondMaxCheckCount() {
-                ToastUtil.show(this@AddProjectActivity, "最多可以选择5个标签")
+                ToastUtil.show(this@AddProjectActivity, "最多可以选择3个标签")
             }
         })
 
@@ -100,9 +100,11 @@ class AddProjectActivity : BaseActivity() {
             showDialog("正在创建工程...")
 
             var sb = StringBuffer()
-            label_me.checkedLabelIds.forEach { id ->
+            label_me.checkedLabelIds.forEachIndexed { index, id ->
                 sb.append(id)
-                sb.append(" ")
+                if (index < label_me.checkedLabelsCount - 1) {
+                    sb.append(",")
+                }
             }
 
             var project = Project()
@@ -161,7 +163,7 @@ class AddProjectActivity : BaseActivity() {
 
         label_me.setLabels(labels)
         // 最大5个标签
-        label_me.setMaxCheckCount(5)
+        label_me.setMaxCheckCount(3)
     }
 
 }

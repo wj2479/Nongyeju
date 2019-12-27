@@ -30,12 +30,7 @@ public class ProjectAdapter extends BaseQuickAdapter<Project, BaseViewHolder> {
     protected void convert(final BaseViewHolder helper, Project item) {
         helper.setText(R.id.tv_title, item.getName());
 
-        if (item.getSchedules() != null && item.getSchedules().size() > 0) {
-            int schedule = item.getSchedules().get(0).getSchedule();
-            helper.setText(R.id.tv_status, "进度: " + schedule + "%");
-        } else {
-            helper.setText(R.id.tv_status, "进度: 0%");
-        }
+        helper.setText(R.id.tv_status, "进度: " + item.getSchedule() + "%");
         helper.setText(R.id.tv_introduce, item.getIntroduce());
 //        helper.setText(R.id.tv_village, item.getVillage());
 //        helper.setText(R.id.tv_district, item.getDistrict());

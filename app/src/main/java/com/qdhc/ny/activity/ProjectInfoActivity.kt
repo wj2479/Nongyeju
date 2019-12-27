@@ -78,9 +78,16 @@ class ProjectInfoActivity : BaseActivity() {
     override fun initClick() {
         title_iv_back.setOnClickListener { finish() }
         bt_comment.setOnClickListener {
-            var intent = Intent(this, AddProjScheduleActivity::class.java)
+            var intent = Intent(this, UpdateDailyReportActivity::class.java)
             intent.putExtra("project", project)
             startActivityForResult(intent, 103)
+        }
+
+        bt_report.setOnClickListener {
+            var intent = Intent(this, ReportAllListActivity::class.java)
+            intent.putExtra("user", userInfo)
+            intent.putExtra("project", project)
+            startActivity(intent)
         }
 
         targetTv.setOnClickListener {
@@ -158,7 +165,7 @@ class ProjectInfoActivity : BaseActivity() {
         areaTv.text = mTitles[project.area - 1] + "   " + villageName
 
         if (null != project.tags) {
-            var split = project.tags.trim().split(" ")
+            var split = project.tags.trim().split(",")
 
             // 标签的数据
             var labels = ArrayList<ILabel>()
@@ -181,32 +188,25 @@ class ProjectInfoActivity : BaseActivity() {
         projSchedule.uid = project.manager
         projSchedule.remark = project.createdAt
 
+
+
         getData()
 
         // 检测是不是需要显示
-        try {
-            checkBtnShow(project.schedules.get(0).schedule)
-        } catch (e: Exception) {
-        }
+        checkBtnShow(project.schedule)
+        scheduleTv.text = project.schedule.toString() + "%"
 
         if (userInfo.role > 1) {
             commentButLayout.visibility = View.GONE
         }
-
+        getSchedule(project)
     }
 
     fun getData() {
-        if (project.schedules != null && project.schedules.size > 0) {
-            scheduleList.addAll(project.schedules)
-        }
-
-        scheduleList.add(projSchedule)
-        project.schedules = scheduleList
-        adapter.notifyDataSetChanged()
-
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH) + 1
 
+        // 获取当月目标进度
         val categoryBmobQuery = BmobQuery<ProjectMonth>()
         categoryBmobQuery.addWhereEqualTo("pid", project.objectId)
         categoryBmobQuery.addWhereEqualTo("year", year)
@@ -232,14 +232,32 @@ class ProjectInfoActivity : BaseActivity() {
                 })
     }
 
+    fun getSchedule(project: Project) {
+        val categoryBmobQuery = BmobQuery<ProjSchedule>()
+        categoryBmobQuery.addWhereEqualTo("pid", project.objectId)
+        categoryBmobQuery.order("-createdAt")
+        categoryBmobQuery.findObjects(object : FindListener<ProjSchedule>() {
+            override fun done(list: MutableList<ProjSchedule>?, e: BmobException?) {
+                if (e == null) {
+                    scheduleList.clear()
+                    scheduleList.addAll(list!!)
+                    scheduleList.add(projSchedule)
+                    adapter.notifyDataSetChanged()
+                }
+            }
+        })
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == 103) {
             if (data != null) {
-                val projSchedule = data.getSerializableExtra("schedule")
-                scheduleList.add(0, projSchedule as ProjSchedule)
-                adapter.notifyDataSetChanged()
-                checkBtnShow(projSchedule.schedule)
+                val schedule = data.getIntExtra("schedule", project.schedule)
+                project.schedule = schedule
+                scheduleTv.text = project.schedule.toString() + "%"
+                checkBtnShow(schedule)
+
+                getSchedule(project)
             }
         }
     }
