@@ -83,6 +83,7 @@ class StartActivity : BaseActivity() {
     fun onLoginSuccess(user: UserInfo, pwd: String) {
         SharedPreferencesUtils.saveLogin(mContext, user)
         SharedPreferencesUtil.save(mContext, "pwd", pwd)
+        ProjectData.getInstance().userInfo = user
 
         CrashReport.setUserId(user.username)
 

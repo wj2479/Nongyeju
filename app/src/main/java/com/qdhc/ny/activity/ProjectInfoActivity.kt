@@ -161,7 +161,7 @@ class ProjectInfoActivity : BaseActivity() {
         if (villageName.isNullOrEmpty())
             villageName = ""
 
-        var mTitles = resources.getStringArray(com.qdhc.ny.R.array.areas)
+        var mTitles = arrayOf("东港区", "莒县", "五莲县", "岚山区")
         areaTv.text = mTitles[project.area - 1] + "   " + villageName
 
         if (null != project.tags) {

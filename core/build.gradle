@@ -71,6 +71,8 @@ dependencies {
     api 'com.github.LuckSiege.PictureSelector:picture_library:v2.2.3'
     //wheel 滚轮布局
     api 'com.contrarywind:Android-PickerView:4.1.7'
+    // 沉浸式状态栏
+    api 'com.jaeger.statusbarutil:library:1.5.1'
 
 }
 

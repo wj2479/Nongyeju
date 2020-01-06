@@ -35,17 +35,29 @@ public class Project extends BmobObject implements Serializable {
 
     /**
      * 所属区域
+     * @deprecated 1.1.5开始弃用
      */
     int area;
+
     /**
      * 所属村落ID
      */
     String village;
 
     /**
+     * 所属区县
+     */
+    private String county = "";
+
+    /**
      * 项目总进度
      */
     int schedule = 0;
+
+    /**
+     * 所属城市
+     */
+    private String city;
 
     public String getName() {
         return name;
@@ -103,6 +115,22 @@ public class Project extends BmobObject implements Serializable {
         this.schedule = schedule;
     }
 
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCounty() {
+        return county;
+    }
+
+    public void setCounty(String county) {
+        this.county = county;
+    }
+
     @Override
     public String toString() {
         return "Project{" +
@@ -113,6 +141,7 @@ public class Project extends BmobObject implements Serializable {
                 ", area=" + area +
                 ", village='" + village + '\'' +
                 ", schedule=" + schedule +
+                ", city=" + city +
                 '}';
     }
 }

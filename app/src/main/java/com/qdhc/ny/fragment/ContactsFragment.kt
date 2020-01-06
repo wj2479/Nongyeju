@@ -1,37 +1,24 @@
 package com.qdhc.ny.fragment
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import cn.bmob.v3.BmobQuery
-import cn.bmob.v3.exception.BmobException
-import cn.bmob.v3.listener.FindListener
 import com.qdhc.ny.R
 import com.qdhc.ny.activity.UserAddActivity
 import com.qdhc.ny.adapter.ContactsAdapter
-import com.qdhc.ny.base.BaseApplication
 import com.qdhc.ny.base.BaseFragment
 import com.qdhc.ny.bmob.UserInfo
-import com.qdhc.ny.common.ProjectData
 import com.yanzhenjie.recyclerview.swipe.widget.DefaultItemDecoration
 import kotlinx.android.synthetic.main.fragment_contacts.*
 
-@SuppressLint("ValidFragment")
-class ContactsFragment(areaId: Int, villageId: String, isShowTitle: Boolean) : BaseFragment() {
+class ContactsFragment() : BaseFragment() {
 
-    var areaId = 0
-    var villageId: String
     var isShowTitle = true
 
     init {
-        this.areaId = areaId
-        this.villageId = villageId
-        this.isShowTitle = isShowTitle
     }
 
     override fun intiLayout(): Int {
@@ -55,8 +42,6 @@ class ContactsFragment(areaId: Int, villageId: String, isShowTitle: Boolean) : B
     override fun initClick() {
         addIv.setOnClickListener { v ->
             var intent = Intent(context, UserAddActivity::class.java)
-            intent.putExtra("area", areaId)
-            intent.putExtra("village", villageId)
             context?.startActivity(intent)
         }
     }
@@ -80,34 +65,4 @@ class ContactsFragment(areaId: Int, villageId: String, isShowTitle: Boolean) : B
 
     }
 
-    override fun onResume() {
-        super.onResume()
-        datas.clear()
-        getData()
-    }
-
-    //获取数据
-    fun getData() {
-        val categoryBmobQuery = BmobQuery<UserInfo>()
-        categoryBmobQuery.addWhereEqualTo("areaId", areaId)
-        categoryBmobQuery.addWhereEqualTo("district", villageId)
-        categoryBmobQuery.addWhereEqualTo("role", 1)
-        categoryBmobQuery.findObjects(
-                object : FindListener<UserInfo>() {
-                    override fun done(list: List<UserInfo>?, e: BmobException?) {
-                        if (e == null) {
-                            Log.e("监理人员结果-----》", list?.size.toString())
-                            list?.forEach { user ->
-                                BaseApplication.userInfoMap.put(user.objectId, user)
-                                datas.add(user)
-                            }
-                            mAdapter.notifyDataSetChanged()
-                            // 保存对象
-                            ProjectData.getInstance().userInfos = list
-                        } else {
-                            Log.e("异常-----》", e.toString())
-                        }
-                    }
-                })
-    }
 }

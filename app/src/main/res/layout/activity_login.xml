@@ -19,7 +19,7 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_marginTop="@dimen/dp_60"
-            android:src="@drawable/ic_maodun"></ImageView>
+            android:src="@mipmap/ic"></ImageView>
 
     </LinearLayout>
 

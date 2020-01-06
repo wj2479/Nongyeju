@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">工程监理系统</string>
+    <string name="app_name">高标农田</string>
     <string name="title_activity_login">Sign in</string>
     <string name="net_error">网络连接失败，请检查网络</string>
     <string name="net_no_worker">网络连接失败，请打开网络设置</string>

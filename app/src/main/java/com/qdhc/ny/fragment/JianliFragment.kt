@@ -13,21 +13,17 @@ import android.widget.Toast
 import cn.bmob.v3.BmobQuery
 import cn.bmob.v3.exception.BmobException
 import cn.bmob.v3.listener.FindListener
-import com.google.gson.Gson
+import cn.bmob.v3.listener.QueryListener
 import com.qdhc.ny.activity.CameraActivity
 import com.qdhc.ny.activity.ProjectInfoActivity
 import com.qdhc.ny.activity.UpdateDailyReportActivity
 import com.qdhc.ny.adapter.ProjectPageAdapter
 import com.qdhc.ny.base.BaseFragment
+import com.qdhc.ny.bmob.Area_Region
 import com.qdhc.ny.bmob.ProjSchedule
 import com.qdhc.ny.bmob.Project
 import com.qdhc.ny.bmob.UserInfo
-import com.qdhc.ny.common.ProjectData
 import com.qdhc.ny.utils.SharedPreferencesUtils
-import interfaces.heweather.com.interfacesmodule.bean.Code
-import interfaces.heweather.com.interfacesmodule.bean.weather.forecast.Forecast
-import interfaces.heweather.com.interfacesmodule.bean.weather.now.Now
-import interfaces.heweather.com.interfacesmodule.view.HeWeather
 import kotlinx.android.synthetic.main.fragment_jianli.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -46,7 +42,7 @@ class JianliFragment : BaseFragment() {
 
     var project: Project? = null
 
-    val areaOrder = arrayOf("第一名", "第二名", "第三名", "第四名")
+    var orderList = ArrayList<Project>()
 
     override fun intiLayout(): Int {
         return com.qdhc.ny.R.layout.fragment_jianli
@@ -71,7 +67,7 @@ class JianliFragment : BaseFragment() {
 
     override fun initData() {
         userInfo = SharedPreferencesUtils.loadLogin(context)
-        helloTv.text = "您  好: " + userInfo.nickName
+        helloTv.text = "您好, " + userInfo.nickName
         val calendar = Calendar.getInstance()
         val simpleDateFormat = SimpleDateFormat("yyyy年MM月dd日")
         val str1 = arrayOf("", "日", "一", "二", "三", "四", "五", "六")
@@ -79,7 +75,59 @@ class JianliFragment : BaseFragment() {
 
 //        tv_all_sort.text = "18"
 //        tv_sort.text = "80%"
+
+        getCityArea()
     }
+
+    /**
+     * 获取当前城市的信息
+     */
+    private fun getCityArea() {
+        val bmobQuery = BmobQuery<Area_Region>()
+        bmobQuery.getObject(userInfo.city, object : QueryListener<Area_Region>() {
+            override fun done(region: Area_Region?, e: BmobException?) {
+                if (e == null) {
+                    if (region != null) {
+                        tv_title.text = region.name + "高标准农田建设"
+                    }
+                }
+            }
+        })
+    }
+
+    /**
+     * 获得排序
+     */
+    private fun getOrderProject() {
+        val categoryBmobQuery = BmobQuery<Project>()
+        categoryBmobQuery.addWhereEqualTo("city", userInfo.city)
+        categoryBmobQuery.order("-schedule")
+        categoryBmobQuery.findObjects(
+                object : FindListener<Project>() {
+                    override fun done(list: List<Project>?, e: BmobException?) {
+                        if (e == null) {
+                            Log.e("排序列表结果-----》", list?.toString())
+                            if (list != null) {
+                                orderList.clear()
+                                orderList.addAll(list)
+                                orderList.forEachIndexed { index, orderPro ->
+                                    if (index == 0) {
+                                        val project = orderList.get(0)
+                                        companyTv.text = project.name
+                                    }
+                                    if (orderPro.objectId.equals(project!!.objectId)) {
+                                        order_city_tv.text = (index + 1).toString()
+                                        return@forEachIndexed
+                                    }
+                                }
+                            }
+                        } else {
+                            Log.e("工程异常-----》", e.toString())
+                        }
+                    }
+                })
+    }
+
 
     override fun onResume() {
         super.onResume()
@@ -89,49 +137,49 @@ class JianliFragment : BaseFragment() {
     val mHandler = Handler()
 
     override fun lazyLoad() {
-        mHandler.postDelayed(object : Runnable {
-            override fun run() {
-                if (ProjectData.getInstance().location != null) {
-                    HeWeather.getWeatherForecast(context, ProjectData.getInstance().location.city, object : HeWeather.OnResultWeatherForecastBeanListener {
-                        override fun onSuccess(forcast: Forecast?) {
-                            Log.e("TAG", "天气：" + Gson().toJson(forcast))
-
-                            if (Code.OK.getCode().equals(forcast?.getStatus())) {
-                                //此时返回数据
-                                if (forcast?.daily_forecast != null && forcast.daily_forecast.size > 0) {
-                                    var base = forcast.daily_forecast.get(0)
-                                    weatherTv.text = base.tmp_min + " - " + base.tmp_max + "℃"
-                                    weatherInfoTv.text = ProjectData.getInstance().location.district + "    " + base.cond_txt_d + "    \t" + base.wind_dir + "  \t" + base.wind_sc + "级"
-                                }
-                            } else {
-                                //在此查看返回数据失败的原因
-                            }
-
-                        }
-
-                        override fun onError(e: Throwable?) {
-                            Log.e("TAG", "天气异常：" + e.toString())
-                        }
-                    })
-
-                    HeWeather.getWeatherNow(context, ProjectData.getInstance().location.city, object : HeWeather.OnResultWeatherNowBeanListener {
-                        override fun onSuccess(now: Now?) {
-                            if (Code.OK.getCode().equals(now?.getStatus())) {
-                                //此时返回数据
-                                tempTv.text = now?.now?.tmp + "℃"
-                            } else {
-                                //在此查看返回数据失败的原因
-                            }
-                        }
-
-                        override fun onError(e: Throwable?) {
-                        }
-                    })
-                } else {
-                    mHandler.postDelayed(this, 800)
-                }
-            }
-        }, 800)
+//        mHandler.postDelayed(object : Runnable {
+//            override fun run() {
+//                if (ProjectData.getInstance().location != null) {
+//                    HeWeather.getWeatherForecast(context, ProjectData.getInstance().location.city, object : HeWeather.OnResultWeatherForecastBeanListener {
+//                        override fun onSuccess(forcast: Forecast?) {
+//                            Log.e("TAG", "天气：" + Gson().toJson(forcast))
+//
+//                            if (Code.OK.getCode().equals(forcast?.getStatus())) {
+//                                //此时返回数据
+//                                if (forcast?.daily_forecast != null && forcast.daily_forecast.size > 0) {
+//                                    var base = forcast.daily_forecast.get(0)
+//                                    weatherTv.text = base.tmp_min + " - " + base.tmp_max + "℃"
+//                                    weatherInfoTv.text = ProjectData.getInstance().location.district + "    " + base.cond_txt_d + "    \t" + base.wind_dir + "  \t" + base.wind_sc + "级"
+//                                }
+//                            } else {
+//                                //在此查看返回数据失败的原因
+//                            }
+//
+//                        }
+//
+//                        override fun onError(e: Throwable?) {
+//                            Log.e("TAG", "天气异常：" + e.toString())
+//                        }
+//                    })
+//
+//                    HeWeather.getWeatherNow(context, ProjectData.getInstance().location.city, object : HeWeather.OnResultWeatherNowBeanListener {
+//                        override fun onSuccess(now: Now?) {
+//                            if (Code.OK.getCode().equals(now?.getStatus())) {
+//                                //此时返回数据
+//                                tempTv.text = now?.now?.tmp + "℃"
+//                            } else {
+//                                //在此查看返回数据失败的原因
+//                            }
+//                        }
+//
+//                        override fun onError(e: Throwable?) {
+//                        }
+//                    })
+//                } else {
+//                    mHandler.postDelayed(this, 800)
+//                }
+//            }
+//        }, 800)
     }
 
     // 记录请求的总次数
@@ -140,7 +188,6 @@ class JianliFragment : BaseFragment() {
 
     fun getProjectData() {
         val categoryBmobQuery = BmobQuery<Project>()
-        categoryBmobQuery.addWhereEqualTo("area", userInfo.areaId)
         categoryBmobQuery.addWhereEqualTo("manager", userInfo.objectId)
         categoryBmobQuery.order("-createdAt")
         categoryBmobQuery.findObjects(
@@ -154,10 +201,13 @@ class JianliFragment : BaseFragment() {
 
                             if (list?.size > 0) {
                                 project = list[0]
-                                tv_title.text = project!!.name
+                                project_name_tv.text = project!!.name
                                 getSchedule(project!!)
+                                getDistrict(project!!)
+
+                                getOrderProject()
                             } else {
-                                tv_title.text = "您还没有项目"
+                                project_name_tv.text = "您还没有项目"
                             }
                         } else {
                             Log.e("工程异常-----》", e.toString())
@@ -178,11 +228,27 @@ class JianliFragment : BaseFragment() {
             override fun done(list: MutableList<ProjSchedule>?, e: BmobException?) {
                 Log.e("项目进度-----》", list?.toString())
                 if (e == null) {
+                    var progress = project.schedule
                     if (list!!.size > 0) {
-                        var progress = Math.max(project.schedule, list[0].schedule)
-                        bubbleSeekbar.setProgress(progress * 1.0f)
-                    } else {
-                        bubbleSeekbar.setProgress(project.schedule * 1.0f)
+                        progress = Math.max(project.schedule, list[0].schedule)
+                    }
+                    progressbar.setProgress(progress)
+                    progressTv.text = progress.toString() + "%"
+                }
+            }
+        })
+    }
+
+    /**
+     * 获取项目的进度
+     */
+    fun getDistrict(project: Project) {
+        val bmobQuery = BmobQuery<Area_Region>()
+        bmobQuery.getObject(project.county, object : QueryListener<Area_Region>() {
+            override fun done(region: Area_Region?, e: BmobException?) {
+                if (e == null) {
+                    if (region != null) {
+                        tv_district.text = region.name
                     }
                 }
             }

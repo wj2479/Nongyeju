@@ -147,9 +147,9 @@ public abstract class BaseActivity extends FragmentActivity {
         if (mDialog == null) {
             mDialog = new ZLoadingDialog(this);
             mDialog.setLoadingBuilder(Z_TYPE.DOUBLE_CIRCLE)//设置类型
-                    .setLoadingColor(Color.parseColor("#4698D1"))//颜色
+                    .setLoadingColor(Color.parseColor("#4DC06B"))//颜色
                     .setHintTextSize(16) // 设置字体大小 dp
-                    .setHintTextColor(Color.parseColor("#4698D1"))  // 设置字体颜色
+                    .setHintTextColor(Color.parseColor("#4DC06B"))  // 设置字体颜色
                     .setDurationTime(0.8) // 设置动画时间百分比 - 0.5倍
                     .setDialogBackgroundColor(Color.parseColor("#FFFFFF")) // 设置背景色，默认白色
                     .setCancelable(false);

@@ -23,7 +23,7 @@ class ProjectTwoTabsFragment : BaseFragment() {
     private fun setupWithViewPager() {
         var mFragments = ArrayList<Fragment>()
 
-        var mTitles = context?.resources?.getStringArray(com.qdhc.ny.R.array.areas)
+        var mTitles = arrayOf("东港区", "莒县", "五莲县", "岚山区")
         mTitles?.forEachIndexed { index, title ->
             mTabLayout.addTab(mTabLayout.newTab().setText(title))
             var areaId = index + 1

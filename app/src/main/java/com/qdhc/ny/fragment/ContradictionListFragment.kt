@@ -128,25 +128,26 @@ class ContradictionListFragment(areaId: Int, villageId: String, isShowTitle: Boo
                 categoryBmobQuery.addWhereEqualTo("village", villageId)
             }
         }
-        categoryBmobQuery.order("-createdAt")
-        categoryBmobQuery.findObjects(
-                object : FindListener<Project>() {
-                    override fun done(list: List<Project>?, e: BmobException?) {
-                        if (e == null) {
-                            Log.e("工程列表结果-----》", list?.toString())
-                            projectList.clear()
-                            projectList.addAll(list!!)
+        categoryBmobQuery.addWhereEqualTo("city", userInfo.city)
 
-                            maxCount = projectList.size
-                            count = 0
-                            projectList.forEach { project ->
-                                getSchedule(project)
-                            }
-                        } else {
-                            Log.e("异常-----》", e.toString())
-                        }
+        categoryBmobQuery.order("-createdAt")
+        categoryBmobQuery.findObjects(object : FindListener<Project>() {
+            override fun done(list: List<Project>?, e: BmobException?) {
+                if (e == null) {
+                    Log.e("工程列表结果-----》", list?.toString())
+                    projectList.clear()
+                    projectList.addAll(list!!)
+
+                    maxCount = projectList.size
+                    count = 0
+                    projectList.forEach { project ->
+                        getSchedule(project)
                     }
-                })
+                } else {
+                    Log.e("异常-----》", e.toString())
+                }
+            }
+        })
     }
 
     /**

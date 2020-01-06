@@ -1,7 +1,6 @@
 package com.qdhc.ny.fragment
 
 import android.support.v4.app.Fragment
-import com.qdhc.ny.R
 import com.qdhc.ny.adapter.MyFragmentPagerAdapter
 import com.qdhc.ny.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_contacts_tab.*
@@ -23,7 +22,7 @@ class ContactsTwoTabsFragment : BaseFragment() {
      */
     private fun setupWithViewPager() {
         val mFragments = ArrayList<Fragment>()
-        var mTitles = context?.resources?.getStringArray(R.array.areas)
+        var mTitles = arrayOf("东港区", "莒县", "五莲县", "岚山区")
         mTitles?.forEachIndexed { index, title ->
             mTabLayout.addTab(mTabLayout.newTab().setText(title))
             mFragments.add(ContactsTabFragment(index + 1, false))

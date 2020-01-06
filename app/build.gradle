@@ -9,8 +9,8 @@ android {
         applicationId "com.qdhc.ny"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 14
-        versionName "1.1.4"
+        versionCode 15
+        versionName "1.1.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
@@ -110,7 +110,7 @@ dependencies {
 //    implementation 'com.zhy:okhttputils:2.6.2'
 
     // 图标 控件库
-    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.0'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
 
     implementation project(path: ':zloadingview')
     implementation project(path: ':treeview_lib')

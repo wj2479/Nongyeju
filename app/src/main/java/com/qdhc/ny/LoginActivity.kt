@@ -10,6 +10,7 @@ import cn.bmob.v3.listener.SaveListener
 import com.google.gson.reflect.TypeToken
 import com.qdhc.ny.base.BaseActivity
 import com.qdhc.ny.bmob.UserInfo
+import com.qdhc.ny.common.ProjectData
 import com.qdhc.ny.utils.BaseUtil
 import com.qdhc.ny.utils.SharedPreferencesUtils
 import com.sj.core.net.Rx.RxRestClient
@@ -191,6 +192,8 @@ class LoginActivity : BaseActivity() {
         SharedPreferencesUtils.saveLogin(mContext, user)
         SharedPreferencesUtil.save(mContext, "usr", user.username)
         SharedPreferencesUtil.save(mContext, "pwd", pwd)
+
+        ProjectData.getInstance().userInfo = user
 
         CrashReport.setUserId(user.username)
 

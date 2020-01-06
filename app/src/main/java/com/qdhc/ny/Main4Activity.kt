@@ -50,11 +50,11 @@ class Main4Activity : BaseActivity() {
     //UI
     private val mTabEntities = ArrayList<CustomTabEntity>()
     private val mIconUnselectIds = intArrayOf(R.drawable.ic_list,
-            R.drawable.ic_message,
-            R.drawable.ic_my)
+            R.mipmap.icon_notice,
+            R.mipmap.icon_wode)
     private val mIconSelectIds = intArrayOf(R.drawable.ic_list_select,
-            R.drawable.ic_message_select,
-            R.drawable.ic_my_select)
+            R.mipmap.icon_notice_select,
+            R.mipmap.icon_wode_select)
 
     override fun initView() {
         userInfo = SharedPreferencesUtils.loadLogin(this)

@@ -70,24 +70,16 @@ class MyFragment : BaseFragment() {
     }
 
     override fun initData() {
-        var array = activity?.resources?.getStringArray(R.array.areas)
-
-        var area = ""
-        if (userInfo.areaId > 0 && userInfo.areaId <= 4) {
-            area = array?.get(userInfo.areaId - 1).toString()
-        }
 
         when (userInfo.role) {
             0 -> tv_job.text = "管理员"
             1 -> {
-                var village = ProjectData.getInstance().villageMap.get(userInfo.district)
-                tv_job.text = area + village?.name + "监理"
+                tv_job.text = "监理"
             }
-            2 -> tv_job.text = area + "领导"
+            2 -> tv_job.text = "区县领导"
             3 -> tv_job.text = "市领导"
             4 -> {
-                var village = ProjectData.getInstance().villageMap.get(userInfo.district)
-                tv_job.text = area + village?.name + "领导"
+                tv_job.text = "乡镇领导"
             }
         }
     }
@@ -100,6 +92,7 @@ class MyFragment : BaseFragment() {
      */
     fun logOut() {
         BmobUser.logOut();
+        ProjectData.getInstance().release()
         startActivity(Intent(activity, LoginActivity::class.java))
         AcitityManagerUtil.getInstance().finishAllActivity()
         SharedPreferencesUtils.removeLogin(context)

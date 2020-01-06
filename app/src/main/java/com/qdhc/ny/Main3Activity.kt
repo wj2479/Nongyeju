@@ -4,13 +4,15 @@ import android.support.v4.app.Fragment
 import android.widget.Toast
 import com.flyco.tablayout.listener.CustomTabEntity
 import com.flyco.tablayout.listener.OnTabSelectListener
-import com.google.gson.Gson
 import com.qdhc.ny.adapter.TabFragmentPagerAdapter
 import com.qdhc.ny.base.BaseActivity
 import com.qdhc.ny.bean.TabIconBean
-import com.qdhc.ny.fragment.ContradictionListFragment
+import com.qdhc.ny.bmob.UserInfo
+import com.qdhc.ny.common.ProjectData
 import com.qdhc.ny.fragment.MyFragment
 import com.qdhc.ny.fragment.NotifyFragment
+import com.qdhc.ny.fragment.ProjectInfoListFragment
+import com.qdhc.ny.utils.SharedPreferencesUtils
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
@@ -18,8 +20,8 @@ import java.util.*
  * 市领导
  */
 class Main3Activity : BaseActivity() {
+    lateinit var userInfo: UserInfo
 
-    var gson = Gson()
     override fun intiLayout(): Int {
         return (R.layout.activity_main2)
     }
@@ -28,23 +30,25 @@ class Main3Activity : BaseActivity() {
     }
 
     override fun initData() {
+        userInfo = SharedPreferencesUtils.loadLogin(this)
+        ProjectData.getInstance().initUserData()
     }
 
     //UI
     private val mTabEntities = ArrayList<CustomTabEntity>()
     private val mIconUnselectIds = intArrayOf(R.drawable.ic_list,
-            R.drawable.ic_message,
-            R.drawable.ic_my)
+            R.mipmap.icon_notice,
+            R.mipmap.icon_wode)
     private val mIconSelectIds = intArrayOf(R.drawable.ic_list_select,
-            R.drawable.ic_message_select,
-            R.drawable.ic_my_select)
+            R.mipmap.icon_notice_select,
+            R.mipmap.icon_wode_select)
 
     override fun initView() {
         //获取数据 在values/arrays.xml中进行定义然后调用
         var tabTitle = resources.getStringArray(R.array.tab3_titles)
         //将fragment装进列表中
         var fragmentList = ArrayList<Fragment>()
-        fragmentList.add(ContradictionListFragment(0, "", true))
+        fragmentList.add(ProjectInfoListFragment())
         fragmentList.add(NotifyFragment())
         fragmentList.add(MyFragment())
         //viewpager加载adapter
@@ -92,4 +96,5 @@ class Main3Activity : BaseActivity() {
             finish()
         }
     }
+
 }

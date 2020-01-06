@@ -32,8 +32,7 @@ import java.util.List;
  * email：893855882@qq.com
  * data：16/7/27
  */
-public class GridImageAdapter extends
-        RecyclerView.Adapter<GridImageAdapter.ViewHolder> {
+public class GridImageAdapter extends RecyclerView.Adapter<GridImageAdapter.ViewHolder> {
     public static final int TYPE_CAMERA = 1;
     public static final int TYPE_PICTURE = 2;
     private LayoutInflater mInflater;
@@ -52,7 +51,7 @@ public class GridImageAdapter extends
     public GridImageAdapter(Context context, int selectMax, onAddPicClickListener mOnAddPicClickListener) {
         this.context = context;
         mInflater = LayoutInflater.from(context);
-        this.selectMax=selectMax;
+        this.selectMax = selectMax;
         this.mOnAddPicClickListener = mOnAddPicClickListener;
     }
 
@@ -73,7 +72,7 @@ public class GridImageAdapter extends
         public ViewHolder(View view) {
             super(view);
             mImg = (ImageView) view.findViewById(R.id.fiv);
-            iv_del =  view.findViewById(R.id.iv_del);
+            iv_del = view.findViewById(R.id.iv_del);
             tv_duration = (TextView) view.findViewById(R.id.tv_duration);
         }
     }

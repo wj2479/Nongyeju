@@ -40,7 +40,7 @@ public class ProjectPageAdapter extends PagerAdapter {
         TextView tv = view.findViewById(R.id.tv_title);
         tv.setText(list.get(position).getName());
         container.addView(view);
-        return container;
+        return view;
     }
 
     @Override
@@ -50,6 +50,6 @@ public class ProjectPageAdapter extends PagerAdapter {
 
     @Override
     public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-        return false;
+        return view == object;
     }
 }

@@ -73,14 +73,6 @@
         <item>紧急上报</item>
     </string-array>
 
-    <!--管辖区域-->
-    <string-array name="areas">
-        <item>东港区</item>
-        <item>莒县</item>
-        <item>五莲县</item>
-        <item>岚山区</item>
-    </string-array>
-
     <!--用户角色-->
     <string-array name="roles">
         <item>监  理</item>
@@ -88,47 +80,4 @@
         <item>主管领导</item>
     </string-array>
 
-    <!--村-->
-    <string-array name="villages">
-        <item>惠家庄村</item>
-        <item>沈疃一村</item>
-        <item>沈疃二村</item>
-        <item>沈疃三村</item>
-        <item>西陈疃一村</item>
-        <item>西陈疃二村</item>
-        <item>西陈疃三村</item>
-        <item>西陈疃四村</item>
-        <item>东陈疃村</item>
-        <item>北鲍疃村</item>
-
-        <item>堰东岭村</item>
-        <item>滕家庄子村</item>
-        <item>水陈坡村</item>
-        <item>东尚沟村</item>
-        <item>西尚沟村</item>
-        <item>卞家庄村</item>
-        <item>南鲍疃村</item>
-        <item>河东村</item>
-        <item>南山村</item>
-        <item>城顶前村</item>
-
-        <item>毛家庄村</item>
-        <item>姜疃村</item>
-        <item>北疃村</item>
-        <item>石灰窑村</item>
-        <item>杨家山子村</item>
-        <item>高家官庄村</item>
-        <item>李家大沟村</item>
-        <item>上蔡庄村</item>
-        <item>下蔡庄村</item>
-        <item>西石墩村</item>
-
-        <item>中石墩村</item>
-        <item>东石墩村</item>
-        <item>石旺沟村</item>
-        <item>七里沟子村</item>
-        <item>惠家官庄村</item>
-        <item>许家洼村</item>
-        <item>曹家官庄村</item>
-    </string-array>
 </resources>

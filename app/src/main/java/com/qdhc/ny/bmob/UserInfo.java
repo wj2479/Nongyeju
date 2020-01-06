@@ -13,7 +13,7 @@ public class UserInfo extends BmobUser implements Serializable {
     /**
      * 昵称
      */
-    private String nickName;
+    private String nickName = "";
 
     /**
      * 年龄
@@ -36,13 +36,32 @@ public class UserInfo extends BmobUser implements Serializable {
 
     /**
      * 所属乡镇
+     *
+     * @deprecated 1.1.5开始弃用
      */
-    private String district;
+    private String district = "";
 
     /**
      * 管辖区县ID
+     *
+     * @deprecated 1.1.5开始弃用
      */
     private int areaId;
+
+    /**
+     * 所属城市
+     */
+    private String city = "";
+
+    /**
+     * 所属区县
+     */
+    private String county = "";
+
+    /**
+     * 所属乡镇
+     */
+    private String village = "";
 
     public String getNickName() {
         return nickName;
@@ -103,5 +122,29 @@ public class UserInfo extends BmobUser implements Serializable {
     @Override
     public String toString() {
         return nickName;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCounty() {
+        return county;
+    }
+
+    public void setCounty(String county) {
+        this.county = county;
+    }
+
+    public String getVillage() {
+        return village;
+    }
+
+    public void setVillage(String village) {
+        this.village = village;
     }
 }

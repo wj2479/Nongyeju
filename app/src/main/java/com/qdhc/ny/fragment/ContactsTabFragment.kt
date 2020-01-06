@@ -43,7 +43,7 @@ class ContactsTabFragment(areaId: Int, isShowTitle: Boolean) : BaseFragment() {
         ProjectData.getInstance().villages.forEach { village ->
             if (village.areaId == areaId) {
                 mTabLayout.addTab(mTabLayout.newTab().setText(village.name))
-                mFragments.add(ContactsFragment(areaId, village.objectId, false))
+                mFragments.add(ContactsBkFragment(areaId, village.objectId, false))
                 mTitleList.add(village.name)
             }
         }

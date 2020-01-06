@@ -10,10 +10,19 @@
         android:id="@+id/iv"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/splash"
+        android:background="@drawable/start_back"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:layout_width="@dimen/dp_250"
+        android:layout_height="wrap_content"
+        android:src="@drawable/into_app"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone"></ImageView>
 
 </android.support.constraint.ConstraintLayout>

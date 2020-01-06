@@ -42,7 +42,6 @@ class NotifyPublishFragment : BaseFragment() {
 
     override fun initData() {
         userInfo = SharedPreferencesUtils.loadLogin(context)
-
     }
 
     override fun lazyLoad() {
@@ -99,6 +98,5 @@ class NotifyPublishFragment : BaseFragment() {
                     }
                 })
     }
-
 
 }
