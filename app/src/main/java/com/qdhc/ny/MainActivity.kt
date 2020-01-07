@@ -200,17 +200,18 @@ class MainActivity : BaseActivity() {
                 })
     }
 
+    /**
+     * 初始化通知的对话框
+     */
     private fun initDialog(notify: Notify, notifyReceiver: NotifyReceiver) {
         var sb = StringBuffer()
-        sb.append("<p>")
-        sb.append(notify.content)
-        sb.append("</p>")
-        sb.append("<br>")
-        sb.append("<br>")
-
-        sb.append("<font color=\"#808080\">")
-        sb.append(notify.createdAt.substring(0, 10))
-        sb.append("</font>")
+        sb.append(notify.content.replace("\n", "<br>"))
+//        sb.append("<br>")
+//
+//        sb.append("<font color=\"#808080\">")
+//        sb.append("发布于: ")
+//        sb.append(notify.createdAt.substring(0, 10))
+//        sb.append("</font>")
 
         var rxDialogSureCancel = RxDialogSureCancel(mContext)
         rxDialogSureCancel.contentView.text = Html.fromHtml(sb.toString())

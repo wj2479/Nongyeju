@@ -38,7 +38,7 @@ class NotifyDetailActivity : BaseActivity() {
     override fun initData() {
         var notify = intent.getSerializableExtra("notify") as Notify
         tv_title.text = notify.content
-        tv_time.text = "时间:" + notify.createdAt
+        tv_time.text = "发布于:" + notify.createdAt
         if (intent.hasExtra("notifyReceiver")) {
             var notifyReceiver = intent.getSerializableExtra("notifyReceiver") as NotifyReceiver
             if (!notifyReceiver.isRead) {

@@ -78,8 +78,6 @@ class NotifyReceivedFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        datas.clear()
-        notifyReceivers.clear()
         getData()
     }
 
@@ -101,7 +99,9 @@ class NotifyReceivedFragment : BaseFragment() {
                                     override fun done(notify: Notify, e: BmobException?) {
                                         if (e == null) {
                                             notify.isRead = nr.isRead
+                                            datas.clear()
                                             datas.add(notify)
+                                            notifyReceivers.clear()
                                             notifyReceivers.add(nr)
                                             mAdapter.notifyDataSetChanged()
                                         }
