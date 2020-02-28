@@ -12,6 +12,7 @@ import com.qdhc.ny.common.ProjectData
 import com.qdhc.ny.fragment.MyFragment
 import com.qdhc.ny.fragment.NotifyFragment
 import com.qdhc.ny.fragment.ProjectInfoListFragment
+import com.qdhc.ny.service.UpadateManager
 import com.qdhc.ny.utils.SharedPreferencesUtils
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
@@ -31,6 +32,7 @@ class Main3Activity : BaseActivity() {
 
     override fun initData() {
         userInfo = SharedPreferencesUtils.loadLogin(this)
+        UpadateManager.checkVersion(this)
         ProjectData.getInstance().initUserData()
     }
 

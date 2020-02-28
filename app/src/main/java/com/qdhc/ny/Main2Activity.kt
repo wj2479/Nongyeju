@@ -23,6 +23,7 @@ import com.qdhc.ny.bmob.UserInfo
 import com.qdhc.ny.fragment.ContradictionListFragment
 import com.qdhc.ny.fragment.MyFragment
 import com.qdhc.ny.fragment.NotifyFragment
+import com.qdhc.ny.service.UpadateManager
 import com.qdhc.ny.utils.SharedPreferencesUtils
 import com.vondear.rxui.view.dialog.RxDialogSureCancel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -45,6 +46,7 @@ class Main2Activity : BaseActivity() {
     }
 
     override fun initData() {
+        UpadateManager.checkVersion(this)
         getNotifyData()
     }
 

@@ -35,7 +35,7 @@ public class ProjectAdapter extends BaseQuickAdapter<Project, BaseViewHolder> {
 //        helper.setText(R.id.tv_village, item.getVillage());
 //        helper.setText(R.id.tv_district, item.getDistrict());
 
-        helper.setText(R.id.tv_from, "创建时间: " + item.getCreatedAt().substring(0, 10));
+        helper.setText(R.id.tv_from, "上传时间: " + item.getCreatedAt().substring(0, 10));
 
     }
 

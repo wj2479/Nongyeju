@@ -30,8 +30,10 @@ public class TreeNodeHelper {
                 for (UserTreeNode childChild : child.getChilds()) {   // 乡镇
                     int n = childChild.getUserInfos().size();
                     count += n;
-                    int num = childChild.getChilds().get(0).getUserInfos().size();
-                    count += num;
+                    if (childChild.getChilds().size() > 0) {
+                        int num = childChild.getChilds().get(0).getUserInfos().size();
+                        count += num;
+                    }
                 }
             }
 
@@ -40,13 +42,17 @@ public class TreeNodeHelper {
             for (UserTreeNode child : treeNode.getChilds()) {   // 乡镇
                 int n = child.getUserInfos().size();
                 count += n;
-                int num = child.getChilds().get(0).getUserInfos().size();
-                count += num;
+                if (child.getChilds().size() > 0) {
+                    int num = child.getChilds().get(0).getUserInfos().size();
+                    count += num;
+                }
             }
         } else if (treeNode.getLevel() == 4) {
             count += treeNode.getUserInfos().size();
-            int num = treeNode.getChilds().get(0).getUserInfos().size();
-            count += num;
+            if (treeNode.getChilds().size() > 0) {
+                int num = treeNode.getChilds().get(0).getUserInfos().size();
+                count += num;
+            }
         }
         return count;
     }
@@ -109,9 +115,11 @@ public class TreeNodeHelper {
 
         if (!treeNode.hasChild()) {
             // 如果没有节点就代表是最后一层  将所有的监理取出来
-            for (UserNode userInfo : treeNode.getChilds().get(0).getUserInfos()) {
-                userInfo.setSelected(select);
-                expandChildren.add(userInfo);
+            if (treeNode.getChilds().size() > 0) {
+                for (UserNode userInfo : treeNode.getChilds().get(0).getUserInfos()) {
+                    userInfo.setSelected(select);
+                    expandChildren.add(userInfo);
+                }
             }
             return expandChildren;
         }
