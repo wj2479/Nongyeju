@@ -54,7 +54,7 @@ public class ProjectWithScheduleAdapter extends BaseQuickAdapter<Project, BaseVi
             helper.setVisible(R.id.tv_person, false);
         }
 
-        helper.setText(R.id.tv_from, "上传时间: " + item.getCreatedAt().substring(0, 10));
+        helper.setText(R.id.tv_from, "上传时间: " + item.getUpdatedAt().substring(0, 10));
 
     }
 

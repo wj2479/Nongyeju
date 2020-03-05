@@ -53,7 +53,7 @@ public class ProjectWithReportAdapter extends BaseQuickAdapter<Project, BaseView
             helper.setVisible(R.id.tv_person, false);
         }
         helper.setText(R.id.tv_tags, TextUtils.isEmpty(item.getTags()) ? "无" : item.getTags());
-        helper.setText(R.id.tv_from, "上传时间: " + item.getCreatedAt().substring(0, 10));
+        helper.setText(R.id.tv_from, "上传时间: " + item.getUpdatedAt().substring(0, 10));
 
         helper.setOnClickListener(R.id.tv_dayReport, new View.OnClickListener() {
             @Override
